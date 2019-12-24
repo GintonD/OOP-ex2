@@ -14,25 +14,27 @@ import java.util.Map;
 import javax.swing.JFrame;
 
 import dataStructure.DGraph;
+import dataStructure.edge;
+import dataStructure.edge_data;
 import dataStructure.node_data;
 import dataStructure.vertex;
 import utils.Point3D;
 
 public class vertex_gui extends JFrame implements ActionListener, MouseListener
 {
-	DGraph graph_arr =new DGraph();
-	LinkedList<Point3D> points = new LinkedList<Point3D>();
-	LinkedList<vertex> vertex_list = new LinkedList<vertex>();
+	DGraph graph_arr;
+	
 
 	public vertex_gui()
 	{
+		graph_arr = new DGraph();
 		initGUI();
 	}
 	public void create_vertex_graph() { 
 	
 		Point3D point1= new Point3D(3, 4);
 		for (int i = 0; i < 10; i++) {
-			vertex node_data = new vertex(i, new Point3D(i+2,i+3));
+			vertex node_data = new vertex(new Point3D(i+2,i+3));
 			graph_arr.addNode(node_data);
 		}
 		
@@ -65,13 +67,16 @@ public class vertex_gui extends JFrame implements ActionListener, MouseListener
 		super.paint(g);
 	
 		Point3D prev = null;
-		for (vertex v: vertex_list) {
+		for (node_data v: graph_arr.getV()) {
 			g.setColor(Color.black);
 			g.fillOval((int)v.getLocation().ix(), (int)v.getLocation().iy(), 10, 10);
 			
-			if (!(v.getHash().isEmpty())) //if have edge
+			if (graph_arr.getE(v.getKey()) != null) //if have edge
 				{
-		
+				for (edge_data e: graph_arr.getE(v.getKey())) {
+					g.setColor(Color.blue);
+					g.drawLine( (int)e.getSrc() , (int)e.getDest(), 4, 4);
+				}
 				}
 		}
 //		for (Point3D p : points) 
@@ -97,6 +102,7 @@ public class vertex_gui extends JFrame implements ActionListener, MouseListener
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
+		
 		String str = e.getActionCommand();
 		
 		if(str.equals("paint vertex"))
@@ -108,35 +114,34 @@ public class vertex_gui extends JFrame implements ActionListener, MouseListener
 			Point3D p2 = new Point3D(50+20*i,300+5*i);
 			Point3D p3 = new Point3D(400+20*i,150+12*i);
 			
-			points.add(p1);
-			points.add(p2);
-			points.add(p3);
 			
-			vertex v1 = new vertex(1,p1);
-			vertex v2 = new vertex(1,p2);
-			vertex v3 = new vertex(1,p3);
+			
+			vertex v1 = new vertex(p1);
+			vertex v2 = new vertex(p2);
+			vertex v3 = new vertex(p3);
 
-			vertex_list.add(v1);
-			vertex_list.add(v2);
-			vertex_list.add(v3);
+			graph_arr.addNode(v1);
+			graph_arr.addNode(v2);
+			graph_arr.addNode(v3);
+			graph_arr.connect(v1.getKey(), v2.getKey(), 4);
+			graph_arr.connect(v2.getKey(), v3.getKey(), 4);
+			graph_arr.connect(v3.getKey(), v1.getKey(), 4);
+			System.out.println("hey");
 
 			}
 			repaint();
 		}
 		if(str.equals("paint edge"))
 		{
-			for (vertex v: vertex_list) {
-				if (!(v.getHash().isEmpty())) {
-					
-				}
-				
-			}
+			
+		/*
+		 * add code
+		 */
 		}
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		System.out.println("mouseClicked");
 		
 	}
 
@@ -145,26 +150,24 @@ public class vertex_gui extends JFrame implements ActionListener, MouseListener
 		int x = e.getX();
 		int y = e.getY();
 		Point3D p = new Point3D(x,y);
-		points.add(p);
+		graph_arr.addNode(new vertex(p));
+	
 		repaint();
-		System.out.println("mousePressed");
+
 		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		System.out.println("mouseReleased");
 		
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		System.out.println("mouseEntered");
 		
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		System.out.println("mouseExited");
 	}
 }
