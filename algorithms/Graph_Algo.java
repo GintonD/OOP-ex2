@@ -64,7 +64,7 @@ public class Graph_Algo implements graph_algorithms{
 	@Override
 	public boolean isConnected() {
 		
-		dfs ( this.graph_alg.getNode(0));
+		dfs ( this.graph_alg.getNode(1));
 		Collection<node_data> vertex_collect = this.graph_alg.getV();
 		for (node_data vertex: vertex_collect) {
 			if (vertex.getTag()==0)
@@ -148,7 +148,7 @@ public void Dijkstras (int src, int dest) {
 	public List<node_data> TSP(List<Integer> targets) {
 		// TODO Auto-generated method stub
 		return null;
-	}
+	}//github.com/GintonD/OOP-ex2.git
 
 	@Override
 	public graph copy() {
