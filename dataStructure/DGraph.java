@@ -25,19 +25,19 @@ public DGraph()
 @Override
 public node_data getNode(int key) 
 {
-	if (!(this.Vertices.get(key)==null))
+	//if (!(this.Vertices.get(key)==null))
 		return this.Vertices.get(key);
-	else
-		return null;
+	//else
+		//return null;
 }
 
 @Override
 public edge_data getEdge(int src, int dest) 
 {
-	if (!(this.Edges.get(src).get(dest) == null))
+	//if (!(this.Edges.get(src).get(dest) == null))
 		return (/*(edge_data)*/ (this.Edges.get(src).get(dest)));
-	else
-		return null;
+	//else
+		//return null;
 }
 
 
@@ -46,8 +46,7 @@ public void addNode(node_data n)
 {
 	this.Vertices.put(n.getKey(),  n); //maybe n shuld cast to vertex
 	MC++; 
-	
-	//this.Edges.put(n.getKey(), new HashMap<Integer, edge>());  //maybe is needed?
+	this.Edges.put(n.getKey(), new HashMap<Integer, edge_data>());  //maybe is needed?
 	
 }
 @Override
@@ -62,7 +61,7 @@ public void connect(int src, int dest, double w)  //one more!!!!!
 			this.Edges.put(src, new HashMap<Integer,edge_data>());
 			size_edges++;
 			this.Edges.get(src).put(dest, NewEdge);
-			
+			MC++;
 		}
 		
 		else // just connect
@@ -72,10 +71,10 @@ public void connect(int src, int dest, double w)  //one more!!!!!
 			size_edges++;
 			
 		}
-		MC++;
+		//MC++;
 	}
-	else
-		System.out.println("Error: the vertices can't connect!!"); //maybe throw here exception..
+	//else
+	//	System.out.println("Error: the vertices can't connect!!"); //maybe throw here exception..
 }
 
 
@@ -91,9 +90,9 @@ public void connect(int src, int dest, double w)  //one more!!!!!
 public Collection<node_data> getV() 
 {
 	
-	if (this.Vertices.isEmpty())
-		return null; 
-	else
+	//if (this.Vertices.isEmpty())
+		//return null; 
+	//else
 		return this.Vertices.values();
 }
 
@@ -110,9 +109,9 @@ public Collection<node_data> getV()
 public Collection<edge_data> getE(int node_id) //one more!!!!!
 {
 //	if (this.Edges.isEmpty())
-//		return null; 
-//	if (this.Edges.get(node_id)==null)
-//		return null;
+	//	return null; 
+	//if (this.Edges.get(node_id)==null)
+	//return null;
 	return this.Edges.get(node_id).values();
 }
 
