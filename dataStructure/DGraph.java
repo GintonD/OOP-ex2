@@ -1,13 +1,14 @@
 package dataStructure;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
 public class DGraph implements graph
 {
-public HashMap<Integer, HashMap<Integer,edge_data/*edge*/>> Edges; 	//maybe convert edge_data to edge
-public HashMap<Integer, node_data/*vertex*/> Vertices ;  	//maybe convert node_data to vertex
+public HashMap<Integer, HashMap<Integer,edge_data/*edge*/>> Edges; 	
+public HashMap<Integer, node_data/*vertex*/> Vertices ;  	
 private int size_edges;
 private static int MC = 0;
 
@@ -18,6 +19,7 @@ public DGraph()
 	this.Vertices= new HashMap<Integer, node_data>();
 	this.size_edges=0;
 }
+
 
 
 @Override
@@ -43,7 +45,7 @@ public edge_data getEdge(int src, int dest)
 public void addNode(node_data n) 
 {
 	this.Vertices.put(n.getKey(),  n); //maybe n shuld cast to vertex
-	MC++; //figure if its true
+	MC++; 
 	
 	//this.Edges.put(n.getKey(), new HashMap<Integer, edge>());  //maybe is needed?
 	
@@ -89,8 +91,10 @@ public void connect(int src, int dest, double w)  //one more!!!!!
 public Collection<node_data> getV() 
 {
 	
-	//return ((Collection<node_data>) this.Vertices);
-	return this.Vertices.values();
+	if (this.Vertices.isEmpty())
+		return null; 
+	else
+		return this.Vertices.values();
 }
 
 
@@ -105,7 +109,10 @@ public Collection<node_data> getV()
 @Override
 public Collection<edge_data> getE(int node_id) //one more!!!!!
 {
-	//return ((Collection<edge_data>) this.Edges.get(node_id));
+//	if (this.Edges.isEmpty())
+//		return null; 
+//	if (this.Edges.get(node_id)==null)
+//		return null;
 	return this.Edges.get(node_id).values();
 }
 
@@ -113,30 +120,75 @@ public Collection<edge_data> getE(int node_id) //one more!!!!!
 @Override
 public node_data removeNode(int key) 
 {
-	int toremove = 0;
-	node_data vr;
-	Collection<node_data> c =this.Vertices.values();
-	Iterator<node_data> iter1 = c.iterator();
+	if (this.Vertices.get(key)==null) // the node is not exist
+		return null;
 	
-	while(iter1.hasNext())  
+	ArrayList<Integer> ForDelete = new ArrayList<Integer>();
+	node_data VerAftDel = /*(vertex)*/Vertices.get(key);
+	
+	
+	//remove all edges going into key-node.
+	this.Edges.forEach((ky, edg) -> 
 	{
-		vr = iter1.next();
-		if(this.Edges.get(vr.getKey()).get(key)!=null) 
+		if (edg.get(key)!=null) 
 		{
-			this.Edges.get(vr.getKey()).remove(key);
-			size_edges--;	
+			edg.remove(key);
+			size_edges--;
+			MC++;
+			
+			if (edg.isEmpty()) //collect the edge with no dst
+				ForDelete.add(ky);
 		}
-	}
+	});
+	for (int ky : ForDelete) //delete them
+		this.Edges.remove(ky);
 	
-	MC++;
 	
 	
-	if(this.Edges.get(key)!=null)
-		 toremove = this.Edges.get(key).size();
-	
+	//remove all edges coming out of key-node.
+	size_edges =size_edges - this.Edges.get(key).size();
 	this.Edges.remove(key);
-	size_edges =size_edges- toremove;
-	return this.Vertices.remove(key);
+	
+	
+	//remove the key-node.
+	this.Vertices.remove(key);
+	MC++;
+
+	return VerAftDel;
+	
+	
+	
+	
+	
+	
+
+//	int toremove = 0;
+//	node_data vr;
+//	Collection<node_data> c =this.Vertices.values();
+//	Iterator<node_data> iter1 = c.iterator();
+//
+//	while(iter1.hasNext())  
+//	{
+//		vr = iter1.next();
+//		if(this.Edges.get(vr.getKey()).get(key)!=null) 
+//		{
+//			this.Edges.get(vr.getKey()).remove(key);
+//			size_edges--;	
+//		}
+//		
+//
+//	}
+//	
+//	MC++;
+//	
+//	
+//	if(this.Edges.get(key)!=null)
+//		 toremove = this.Edges.get(key).size();
+//	
+//	this.Edges.remove(key);
+//	size_edges =size_edges- toremove;
+//	return this.Vertices.remove(key);
+	
 }
 
 
