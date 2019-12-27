@@ -27,7 +27,7 @@ import utils.*;
  * This class makes a gui window to represent a graph and
  * use the Algorithms from class Graph_Algo on live.
  * (use the methods and represent it on the gui window while it is still up).
- * @author YosefTwito and EldarTakach
+ * @author Ginton & fooxi
  */
 
 public class Graph_GUI extends JFrame implements ActionListener, MouseListener{
@@ -142,7 +142,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener{
 			initGUI(this.gr);
 			break;
 		
-		case "Init From textFile ": ////////////////////////////////////// gotta check /////////////////
+		case "Init From textFile ": //not finish
 			System.out.println("Init From textFile: ");
 			t=new Graph_Algo();
 
@@ -158,7 +158,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener{
 			}			
 			break;
 
-		case "Save as textFile ": ////////////////////////////////////// gotta check /////////////////
+		case "Save as textFile ": ///not finish
 			System.out.println("Save as textFile: ");
 			t=new Graph_Algo();
 
@@ -207,8 +207,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener{
 		System.out.println(e.getX()+" , "+e.getY());
 		Point3D r = new Point3D(e.getX(), e.getY(), 0);
 		
-		//g.setColor(Color.BLUE);
-		//g.fillOval((int)p.ix(), (int)p.iy(), 20, 20);
+
 		this.repaint();
 	}
 
