@@ -34,12 +34,14 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener{
 	
 	graph gr;
 	
-	public Graph_GUI(graph g){
+	public Graph_GUI(graph g)
+	{
 		initGUI(g);
 	}
 	
 	
-	public void paint(Graphics d) {
+	public void paint(Graphics d) 
+	{
 		super.paint(d);
 		
 		if (gr != null) {
@@ -63,17 +65,19 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener{
 					Collection<edge_data> edges = gr.getE(n.getKey());
 					for (edge_data e : edges) {
 						//draw edges
+						
 						d.setColor(Color.RED);
 						
 						Point3D p2 = gr.getNode(e.getDest()).getLocation();
 						d.drawLine(p.ix()+5, p.iy()+5, p2.ix()+5, p2.iy()+5);
 						//draw direction
 						d.setColor(Color.YELLOW);
-						d.fillOval((int)((p.ix()*0.7)+(0.3*p2.ix()))+5, 1+(int)((p.iy()*0.7)+(0.3*p2.iy())), 8, 8);
+						d.fillOval((int)((p.ix()*0.1)+(0.9*p2.ix()))+7, 1+(int)((p.iy()*0.1)+(0.9*p2.iy())), 7, 7);
 						//draw weight
-						String sss = ""+String.valueOf(e.getWeight());
+						String WeightString = ""+String.valueOf(e.getWeight());
 						d.setColor(Color.RED);
-						d.drawString(sss, 1+(int)((p.ix()*0.7)+(0.3*p2.ix())), 1+(int)((p.iy()*0.7)+(0.3*p2.iy())));
+						d.drawString(WeightString, 3+(int)((p.ix()*0.1)+(0.9*p2.ix()))+7, 3+(int)((p.iy()*0.1)+(0.9*p2.iy())));
+						
 					}
 				}	
 			}
@@ -180,17 +184,21 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener{
 			break;
 			
 		case "Show Shortest Path ":
-			System.out.println("Show Shortest Path ");
+			System.out.println("Shortest Path ");
 			
 			break;
 			
 		case "$$ TSP $$ ": 
-			System.out.println("$$ TSP $$ ");
+			System.out.println("TSP");
 			break;
 			
 		case "Is Conncected ":
-			System.out.println("Is Conncected ");
-			
+			Graph_Algo algcon = new Graph_Algo();
+			algcon.init(this.gr);
+			if (algcon.isConnected())
+				System.out.println("Connected !");
+			else
+				System.out.println("not Connected !");
 			break;
 			
 		}
