@@ -57,9 +57,14 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 		Menu alg  = new Menu("Algorithms ");
 		menuBar.add(alg);
 		
+//**************File button*****************		
 		MenuItem item1 = new MenuItem("Init Graph");
 		item1.addActionListener(this);
 		file.add(item1);
+		
+		MenuItem item9 = new MenuItem("Init Random Graph");
+		item9.addActionListener(this);
+		file.add(item9);
 		
 		MenuItem item2 = new MenuItem("Init From File");
 		item2.addActionListener(this);
@@ -73,6 +78,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 		item4.addActionListener(this);
 		file.add(item4);
 		
+//**************Algorithms button*****************
 		MenuItem item5 = new MenuItem("Shortest Path");
 		item5.addActionListener(this);
 		alg.add(item5);
@@ -162,22 +168,45 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 			initGUI(this.gr);
 			break;
 			
+//******************Init Random Graph******************************
+		case "Init Random Graph":
+			System.out.println("Init Random Graph:");
+			
+				dataStructure.vertex.idBuilder=0; //maybe delete
+				DGraph rg = new DGraph();
+				vertex[] v = new vertex[4];
+				for(int i =0; i<v.length; i++) {
+					int rx = (int)(Math.random()*350+40);
+					int ry = (int)(Math.random()*350+80);
+					Point3D p =new Point3D(rx,ry);
+					v[i] = new vertex(p);
+					rg.addNode(v[i]);
+				}
+				for(int i = 1; i<Math.pow(v.length, 2); i++) {
+					int rs = (int)(Math.random()*v.length);
+					int rf = (int)(Math.random()*v.length);
+					int w = (int)(Math.random()*50);
+					rg.connect(v[rs].getKey(), v[rf].getKey(), w);
+				}
+				this.gr=rg;
+				initGUI(this.gr);
+		
+			
+			break;	
 //***************Init Graph From File***************************************		
 		case "Init From File": // not work becuase of init
-			System.out.println("Init From File:\n");
 			t=new Graph_Algo();
 
 			jfc = new JFileChooser(FileSystemView.getFileSystemView());
-			jfc.setDialogTitle("Init graph out of text file.."); 
-			filter = new FileNameExtensionFilter(" .txt","txt");
-			jfc.setFileFilter(filter);
+			jfc.setDialogTitle("Init graph out of file.."); 
 
-			int returnVal = jfc.showOpenDialog(null);
-			if(returnVal == JFileChooser.APPROVE_OPTION) 
-			{
-				System.out.println("You chose to open this file: " + jfc.getSelectedFile().getName());
+			int userSelection = jfc.showOpenDialog(null);
+			if(userSelection == JFileChooser.APPROVE_OPTION) {
+				System.out.println("You chose to open this file - " + jfc.getSelectedFile().getName());
 				t.init(jfc.getSelectedFile().getAbsolutePath());
-			}			
+				graph gr_new=t.copy();
+				initGUI(gr_new);	
+			}		
 			break;
 			
 //***************Save Graph to File***************************************
