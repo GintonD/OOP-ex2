@@ -113,18 +113,48 @@ public class Graph_Algo implements graph_algorithms{
 		if (isConnected(src, dest)) {
 			Dijkstras2(src, dest);		
 			String path_List =this.graph_alg.getNode(dest).getInfo();
-			
+			String [] splitArr = path_List.split(" ");
+			for (int i = 0; i < splitArr.length; i++) {
+				int key = Integer.parseInt(splitArr[i]);
+				list.add(this.graph_alg.getNode(key));
+			}
 				
 			
+				
 			return list;
-	}
+	} else {
 		System.out.println("isn't connected");
-		return null;
+		return list;
+	}
 	}
 	@Override
+	@Override
 	public List<node_data> TSP(List<Integer> targets) {
-		// TODO Auto-generated method stub
-		return null;
+		LinkedList<node_data> list = new LinkedList<node_data>();
+		int key;
+		// **in target has only one
+		if (targets.size()==1) {
+			key= targets.get(0);
+			list.add(this.graph_alg.getNode(key));
+			return list;
+		}
+		
+		for (int i=0; i<targets.size()-1; i++) {
+			int src= targets.get(i);
+			int dest = targets.get(i+1);
+			// save a list from i to i+1
+			List<node_data> list_path	= shortestPath(src, dest);
+			for (int j = 0; j < list_path.size(); j++) {
+				node_data node = list_path.get(j);
+				key = list_path.get(j).getKey();
+				if ((targets.contains(key))) {
+//					targets.remove(key);
+					
+				}
+				list.add(node);
+			}
+		}
+		return list;
 	}
 	@Override
 	public graph copy() {
