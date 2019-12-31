@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -343,6 +344,72 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 //**********************TSP***********************************	
 		case "TSP": 
 			System.out.println("TSP");//empty!!!
+			JFrame TSPinput = new JFrame();
+			StrPath="";
+
+			String SourceNodeTSP = JOptionPane.showInputDialog(TSPinput,"How many nodes ?");
+			int manyTSP=1;
+			try {
+				manyTSP = Integer.parseInt(SourceNodeTSP);
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(TSPinput, "Ilegal number of nodes.");
+				break;
+			}
+			if (manyTSP<1 || manyTSP>this.gr.nodeSize()) {
+				JOptionPane.showMessageDialog(TSPinput, "Ilegal number of nodes.");
+				break;
+			}
+
+			int cmon=0;
+			if (manyTSP==1) {
+				SourceNodeTSP = JOptionPane.showInputDialog(TSPinput,"Enter node-key");
+				try {
+					cmon = Integer.parseInt(SourceNodeTSP);
+				} catch (NumberFormatException e) {
+					JOptionPane.showMessageDialog(TSPinput, "Ilegal key.");
+					break;
+				}
+				graph gr_new=new DGraph();
+
+				gr_new.addNode(this.gr.getNode(cmon));
+				this.initGUI(gr_new);	
+				break;
+			}
+
+			List<Integer> TSPnodes = new ArrayList<Integer>();
+			int TSPkey=0;
+			for (int i=0; i<manyTSP; i++) {
+				SourceNodeTSP = JOptionPane.showInputDialog(TSPinput,"Enter node-key "+(i+1)+"/"+manyTSP);
+				try {
+					TSPkey = Integer.parseInt(SourceNodeTSP);
+				} catch (NumberFormatException e) {
+					JOptionPane.showMessageDialog(TSPinput, "Ilegal key.");
+					break;
+				}
+				if(this.gr.getNode(TSPkey)==null) {
+					JOptionPane.showMessageDialog(TSPinput, "Ilegal key.");
+					break;
+				}	
+				TSPnodes.add(TSPkey);
+			}
+
+			Graph_Algo newGTSP = new Graph_Algo();
+			newGTSP.init(gr);
+
+			List<node_data> TSP = newGTSP.TSP(TSPnodes);
+			graph gr_new=new DGraph();
+
+			gr_new.addNode(TSP.get(0));
+			StrPath=StrPath+TSP.get(0).getKey();
+			for (int i=1; i<TSP.size(); i++) {
+				gr_new.addNode(TSP.get(i));
+				gr_new.connect(TSP.get(i-1).getKey(), TSP.get(i).getKey(), this.gr.getEdge(TSP.get(i-1).getKey(), TSP.get(i).getKey()).getWeight());
+				StrPath=StrPath+("->"+TSP.get(i).getKey());
+			}
+
+			this.initGUI(gr_new);
+			JOptionPane.showMessageDialog(TSPinput,"The Short Path is:\n"+ StrPath);
+			System.out.println(StrPath);
 			break;
 
 			
