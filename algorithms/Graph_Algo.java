@@ -7,10 +7,13 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
-
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 import dataStructure.DGraph;
 import dataStructure.edge_data;
@@ -103,6 +106,7 @@ public class Graph_Algo implements graph_algorithms{
 		}
 		else {
 			System.out.println("isnot connected");
+//			throw RuntimeException("no connect");
 			return Double.MAX_VALUE;
 		}
 	}
@@ -128,33 +132,40 @@ public class Graph_Algo implements graph_algorithms{
 	}
 	}
 	@Override
-	@Override
 	public List<node_data> TSP(List<Integer> targets) {
-		LinkedList<node_data> list = new LinkedList<node_data>();
+		LinkedList<node_data> listTsp = new LinkedList<node_data>();
 		int key;
+		if (targets.size()==0) {
+			System.out.println("you need to send sort...");
+			return null;
+		}
 		// **in target has only one
 		if (targets.size()==1) {
 			key= targets.get(0);
-			list.add(this.graph_alg.getNode(key));
-			return list;
+			listTsp.add(this.graph_alg.getNode(key));
+			return listTsp;
 		}
-		
+		int src=0;
 		for (int i=0; i<targets.size()-1; i++) {
-			int src= targets.get(i);
+			 src= targets.get(i);
 			int dest = targets.get(i+1);
+			if (!(exsictVertex(src, dest))) //the src or dest doesnt exsict
+				return null;
 			// save a list from i to i+1
-			List<node_data> list_path	= shortestPath(src, dest);
-			for (int j = 0; j < list_path.size(); j++) {
-				node_data node = list_path.get(j);
-				key = list_path.get(j).getKey();
+			List<node_data> list_ShortPath	= shortestPath(src, dest);
+			src = dest;
+			for (int j = 0; j < list_ShortPath.size()-1; j++) {
+				node_data node = list_ShortPath.get(j);
+				key = list_ShortPath.get(j).getKey();
 				if ((targets.contains(key))) {
 //					targets.remove(key);
 					
 				}
-				list.add(node);
+				listTsp.add(node);
 			}
 		}
-		return list;
+		listTsp.add(this.graph_alg.getNode(src));
+		return listTsp;
 	}
 	@Override
 	public graph copy() {
@@ -183,7 +194,7 @@ public class Graph_Algo implements graph_algorithms{
 		private void weightInfin() {
 			Collection<node_data> vertex_collect = this.graph_alg.getV();
 			for (node_data vertex: vertex_collect) {
-				vertex.setWeight(Double.POSITIVE_INFINITY);
+				vertex.setWeight(2000);
 			}
 		}
 		private void unvisited() {
@@ -224,22 +235,25 @@ public void Dijkstras2 (int src, int dest) {
 	weightInfin ();
 	this.graph_alg.getNode(src).setWeight(0.);
 	this.graph_alg.getNode(src).setInfo(""+ graph_alg.getNode(src).getKey());
-	PriorityQueue<node_data> queueOfList = new PriorityQueue<node_data>(new The_Comparator());
-//Queue<node_data> queueOfList = new LinkedList<node_data>();
-
-	queueOfList.add(this.graph_alg.getNode(src));
-//	for (node_data vertex: this.graph_alg.getV()) {
-//		queueOfList.add(vertex);
-//	}
+//	PriorityQueue<node_data> queueOfList = new PriorityQueue<node_data>(10,new The_Comparator());
+//Queue<node_data> queueOfList2 = new LinkedList<node_data>();
+LinkedList<node_data> queueOfList = new LinkedList<node_data>();
+The_Comparator comp = new The_Comparator();
+	for (node_data vertex: this.graph_alg.getV()) {
+		queueOfList.add(vertex);
+	}
+	
 	while (!queueOfList.isEmpty() && this.graph_alg.getNode(dest).getTag()==0) {
-		node_data v1 = queueOfList.poll();
+		queueOfList.sort(comp); // O(n) i try to that with Heap and then is Log n
+		node_data v1 = queueOfList.get(0);
 		// Visit each edge exiting vertex
 		for (edge_data edge : this.graph_alg.getE(v1.getKey())) {
 			node_data v2 = this.graph_alg.getNode(edge.getDest());
 			// add to queue for next check
-			queueOfList.add(v2);
+//			queueOfList.add(v2);
 			if (v2.getTag()==0) { //unvisited 
-				double distV2 = v1.getWeight() + edge.getWeight();				
+				
+			double distV2 = v1.getWeight() + edge.getWeight();				
 			if (distV2<v2.getWeight()) {
 				v2.setWeight(distV2);
 				v2.setInfo(v1.getInfo()+ " " + v2.getKey());
@@ -248,7 +262,7 @@ public void Dijkstras2 (int src, int dest) {
 			}
 		}
 		v1.setTag(1);
-		queueOfList.remove(v1);
+		queueOfList.remove(0);
 
 	}
 }
@@ -265,8 +279,14 @@ class The_Comparator implements Comparator<node_data> {
 	@Override
 	public int compare(node_data arg0, node_data arg1) {
 		// TODO Auto-generated method stub
-		return (int)(arg0.getKey() - arg1.getKey());
-	} 
+//	if (arg0.getWeight()>arg1.getWeight()) return 1;
+//	else if (arg0.getWeight()<arg1.getWeight()) return -1;
+//	else
+//		return 0;
+		return (int)(arg0.getWeight()-arg1.getWeight());
+	}
+}
+	
 	
 	// algoritem dijkstras - see more wikipedia https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Algorithm
 	/*   1. Mark all nodes unvisited and infinity weight
@@ -306,5 +326,5 @@ class The_Comparator implements Comparator<node_data> {
 	}
 	*/
 } 
-}
+
 
