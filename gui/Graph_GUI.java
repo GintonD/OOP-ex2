@@ -9,10 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JFileChooser;
@@ -33,7 +31,8 @@ import utils.*;
 public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 {
 	
-	graph gr;
+	private static final long serialVersionUID = 1L;
+	private graph TempGraphGui;
 	
 	public Graph_GUI(graph g)
 	{
@@ -44,7 +43,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 	
 	private void initGUI(graph g) 
 	{
-		this.gr=g;
+		this.TempGraphGui=g;
 		this.setSize(720, 720);
 		this.setTitle("The Graph of Ginton & Fooxi !");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,32 +51,29 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 		MenuBar menuBar = new MenuBar();
 		this.setMenuBar(menuBar);
 		
-		Menu file = new Menu("File ");
-		menuBar.add(file);
+		Menu New = new Menu("New ");
+		menuBar.add(New);
 		
 		Menu alg  = new Menu("Algorithms ");
 		menuBar.add(alg);
 		
-//**************File button*****************		
+//**************New button*****************		
 		MenuItem item1 = new MenuItem("Init Graph");
 		item1.addActionListener(this);
-		file.add(item1);
+		New.add(item1);
 		
 		MenuItem item9 = new MenuItem("Init Random Graph");
 		item9.addActionListener(this);
-		file.add(item9);
+		New.add(item9);
 		
 		MenuItem item2 = new MenuItem("Init From File");
 		item2.addActionListener(this);
-		file.add(item2);
+		New.add(item2);
 		
 		MenuItem item3 = new MenuItem("Save to File");
 		item3.addActionListener(this);
-		file.add(item3);
+		New.add(item3);
 		
-		MenuItem item4 = new MenuItem("Save as Picture");
-		item4.addActionListener(this);
-		file.add(item4);
 		
 //**************Algorithms button*****************
 		MenuItem item5 = new MenuItem("Shortest Path");
@@ -105,10 +101,10 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 	{
 		super.paint(d);
 		
-		if (gr != null) 
+		if (TempGraphGui != null) 
 		{
 			//get nodes
-			Collection<node_data> nodes = gr.getV();
+			Collection<node_data> nodes = TempGraphGui.getV();
 			
 			for (node_data n : nodes) 
 			{
@@ -122,17 +118,17 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 				d.drawString(""+n.getKey(), p.ix()-4, p.iy()-4);
 				
 				//check if there are edges
-				if (gr.edgeSize()==0)
+				if (TempGraphGui.edgeSize()==0)
 					continue;
-				if ((gr.getE(n.getKey())!=null))
+				if ((TempGraphGui.getE(n.getKey())!=null))
 				{
 					//get edges
-					Collection<edge_data> edges = gr.getE(n.getKey());
+					Collection<edge_data> edges = TempGraphGui.getE(n.getKey());
 					for (edge_data e : edges) 
 					{
 						//draw edges
 						d.setColor(Color.RED);
-						Point3D p2 = gr.getNode(e.getDest()).getLocation();
+						Point3D p2 = TempGraphGui.getNode(e.getDest()).getLocation();
 						d.drawLine(p.ix()+5, p.iy()+5, p2.ix()+5, p2.iy()+5);
 						
 						//draw direction
@@ -157,7 +153,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 	public void actionPerformed(ActionEvent Command) 
 	{
 		String str = Command.getActionCommand();		
-		Graph_Algo t=new Graph_Algo();
+		Graph_Algo TempGrAl=new Graph_Algo();
 		JFileChooser jfc;
 		FileNameExtensionFilter filter;
 		
@@ -166,7 +162,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 //***************Init Graph***************************************
 		case "Init Graph": 
 			System.out.println("Init Graph:");
-			initGUI(this.gr);
+			initGUI(this.TempGraphGui);
 			break;
 			
 //******************Init Random Graph******************************
@@ -175,58 +171,58 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 			
 				dataStructure.vertex.idBuilder=0; //maybe delete
 				DGraph rg = new DGraph();
-				vertex[] v = new vertex[4];
-				for(int i =0; i<v.length; i++) {
+				vertex[] v = new vertex[10];
+				for(int i =0; i<v.length; i++) 
+				{
 					int rx = (int)(Math.random()*350+40);
 					int ry = (int)(Math.random()*350+80);
 					Point3D p =new Point3D(rx,ry);
 					v[i] = new vertex(p);
 					rg.addNode(v[i]);
 				}
-				for(int i = 1; i<Math.pow(v.length, 2); i++) {
+				for(int i = 1; i<Math.pow(v.length, 2); i++) 
+				{
 					int rs = (int)(Math.random()*v.length);
 					int rf = (int)(Math.random()*v.length);
 					int w = (int)(Math.random()*50);
 					rg.connect(v[rs].getKey(), v[rf].getKey(), w);
 				}
-				this.gr=rg;
-				initGUI(this.gr);
+				this.TempGraphGui=rg;
+				initGUI(this.TempGraphGui);
 		
 			
 			break;	
 //***************Init Graph From File***************************************		
-		case "Init From File": // not work becuase of init
-			t=new Graph_Algo();
+		case "Init From File": 
+			TempGrAl=new Graph_Algo();
 
 			jfc = new JFileChooser(FileSystemView.getFileSystemView());
-			jfc.setDialogTitle("Init graph out of file.."); 
+			jfc.setDialogTitle("Open Graph"); 
 
 			int userSelection = jfc.showOpenDialog(null);
-			if(userSelection == JFileChooser.APPROVE_OPTION) {
-				System.out.println("You chose to open this file - " + jfc.getSelectedFile().getName());
-				t.init(jfc.getSelectedFile().getAbsolutePath());
-				graph gr_new=t.copy();
+			if(userSelection == JFileChooser.APPROVE_OPTION) 
+			{
+				System.out.println("The file:" + jfc.getSelectedFile().getName()+" is successful Opened.");
+				TempGrAl.init(jfc.getSelectedFile().getAbsolutePath());
+				graph gr_new=TempGrAl.copy();
+				
 				initGUI(gr_new);	
-			}		
-			break;
+			}			
+			break;		
 			
 //***************Save Graph to File***************************************
 		case "Save to File":  //not work because of save
-			System.out.println("Save to File:");
+			TempGrAl=new Graph_Algo((DGraph)this.TempGraphGui);		
+
 			jfc = new JFileChooser(FileSystemView.getFileSystemView());
-			jfc.setDialogTitle("Save graph to file..");
+			jfc.setDialogTitle("Save As");
 
 			int userSelection1 = jfc.showSaveDialog(null);
 			if (userSelection1 == JFileChooser.APPROVE_OPTION) 
 			{
-				System.out.println("Save to File - " + jfc.getSelectedFile().getAbsolutePath());
-				t.save(jfc.getSelectedFile().getAbsolutePath());
+				System.out.println("The Graph saved in this path: " + jfc.getSelectedFile().getAbsolutePath());
+				TempGrAl.save(jfc.getSelectedFile().getAbsolutePath());
 			}
-			break;
-//******************Save as Picture***************************
-		case "Save as Picture": //empty!!!
-			System.out.println("Save as Picture");
-			
 			break;
 			
 //************Shortest Path	*********************
@@ -252,14 +248,14 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 					break;
 				}
 				
-				if (this.gr.getNode(src)==null) 
+				if (this.TempGraphGui.getNode(src)==null) 
 				{
 					JOptionPane.showMessageDialog(sp, "Error: illegal Vertex-key");
 					System.out.println("Error: illegal Vertex-key");
 					break;
 				}
 				
-				if (this.gr.getNode(dest)==null) 
+				if (this.TempGraphGui.getNode(dest)==null) 
 				{
 					JOptionPane.showMessageDialog(sp, "Error: illegal Vertex-key");
 					System.out.println("Error: illegal Vertex-key");
@@ -267,9 +263,16 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 				}
 				
 				Graph_Algo GSP = new Graph_Algo();
-				GSP.init(gr);
+				GSP.init(TempGraphGui);
 
 				List<node_data> SPList = GSP.shortestPath(src, dest);
+				
+				if(SPList.size()<2) //HAVE TO CHECK WHAT THE PROBLEM$$$$$$$$$$%%%%%
+				{
+					JOptionPane.showMessageDialog(sp,"There is no Path,\nThe Graph is NOT connect!!");
+					break;
+				}
+					
 				
 				graph gr_new=new DGraph();
 				gr_new.addNode(SPList.get(0));
@@ -277,7 +280,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 				for (int i=1; i<SPList.size(); ++i) 
 				{
 					gr_new.addNode(SPList.get(i));
-					gr_new.connect(SPList.get(i-1).getKey(), SPList.get(i).getKey(), this.gr.getEdge(SPList.get(i-1).getKey(), SPList.get(i).getKey()).getWeight());
+					gr_new.connect(SPList.get(i-1).getKey(), SPList.get(i).getKey(), this.TempGraphGui.getEdge(SPList.get(i-1).getKey(), SPList.get(i).getKey()).getWeight());
 					StrPath=StrPath+("->"+SPList.get(i).getKey());
 				}
 				this.initGUI(gr_new);
@@ -314,14 +317,14 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 					break;
 				}
 				
-				if (this.gr.getNode(src)==null) 
+				if (this.TempGraphGui.getNode(src)==null) 
 				{
 					JOptionPane.showMessageDialog(sp, "Error: illegal Vertex-key");
 					System.out.println("Error: illegal Vertex-key");
 					break;
 				}
 				
-				if (this.gr.getNode(dest)==null) 
+				if (this.TempGraphGui.getNode(dest)==null) 
 				{
 					JOptionPane.showMessageDialog(sp, "Error: illegal Vertex-key");
 					System.out.println("Error: illegal Vertex-key");
@@ -329,8 +332,9 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 				}
 				
 				Graph_Algo GSP = new Graph_Algo();
-				GSP.init(gr);
+				GSP.init(TempGraphGui);
 				double dis = GSP.shortestPathDist(src, dest);
+				
 				
 				JOptionPane.showMessageDialog(sp,"The Shortest Path Distance is:\n"+ dis);
 			}	
@@ -343,35 +347,43 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 			
 //**********************TSP***********************************	
 		case "TSP": 
-			System.out.println("TSP");//empty!!!
+			System.out.println("TSP");
 			JFrame TSPinput = new JFrame();
 			StrPath="";
 
 			String SourceNodeTSP = JOptionPane.showInputDialog(TSPinput,"How many nodes ?");
 			int manyTSP=1;
-			try {
+			try 
+			{
 				manyTSP = Integer.parseInt(SourceNodeTSP);
-			} catch (NumberFormatException e) {
+			} 
+			catch (NumberFormatException e) 
+			{
 				JOptionPane.showMessageDialog(TSPinput, "Ilegal number of nodes.");
 				break;
 			}
-			if (manyTSP<1 || manyTSP>this.gr.nodeSize()) {
+			if (manyTSP<1 || manyTSP>this.TempGraphGui.nodeSize()) 
+			{
 				JOptionPane.showMessageDialog(TSPinput, "Ilegal number of nodes.");
 				break;
 			}
 
 			int cmon=0;
-			if (manyTSP==1) {
+			if (manyTSP==1) 
+			{
 				SourceNodeTSP = JOptionPane.showInputDialog(TSPinput,"Enter node-key");
-				try {
+				try 
+				{
 					cmon = Integer.parseInt(SourceNodeTSP);
-				} catch (NumberFormatException e) {
+				}
+				catch (NumberFormatException e)
+				{
 					JOptionPane.showMessageDialog(TSPinput, "Ilegal key.");
 					break;
 				}
 				graph gr_new=new DGraph();
 
-				gr_new.addNode(this.gr.getNode(cmon));
+				gr_new.addNode(this.TempGraphGui.getNode(cmon));
 				this.initGUI(gr_new);	
 				break;
 			}
@@ -386,7 +398,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 					JOptionPane.showMessageDialog(TSPinput, "Ilegal key.");
 					break;
 				}
-				if(this.gr.getNode(TSPkey)==null) {
+				if(this.TempGraphGui.getNode(TSPkey)==null) {
 					JOptionPane.showMessageDialog(TSPinput, "Ilegal key.");
 					break;
 				}	
@@ -394,7 +406,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 			}
 
 			Graph_Algo newGTSP = new Graph_Algo();
-			newGTSP.init(gr);
+			newGTSP.init(TempGraphGui);
 
 			List<node_data> TSP = newGTSP.TSP(TSPnodes);
 			graph gr_new=new DGraph();
@@ -403,7 +415,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 			StrPath=StrPath+TSP.get(0).getKey();
 			for (int i=1; i<TSP.size(); i++) {
 				gr_new.addNode(TSP.get(i));
-				gr_new.connect(TSP.get(i-1).getKey(), TSP.get(i).getKey(), this.gr.getEdge(TSP.get(i-1).getKey(), TSP.get(i).getKey()).getWeight());
+				gr_new.connect(TSP.get(i-1).getKey(), TSP.get(i).getKey(), this.TempGraphGui.getEdge(TSP.get(i-1).getKey(), TSP.get(i).getKey()).getWeight());
 				StrPath=StrPath+("->"+TSP.get(i).getKey());
 			}
 
@@ -416,7 +428,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 //*******************Is Conncected*******************
 		case "Is Conncected ":
 			Graph_Algo algcon = new Graph_Algo();
-			algcon.init(this.gr);
+			algcon.init(this.TempGraphGui);
 			JFrame is = new JFrame();
 			if (algcon.isConnected())
 			{
