@@ -9,19 +9,11 @@ import java.util.Iterator;
 public class DGraph implements graph,Serializable
 {
 
-
-	
-/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
+private static final long serialVersionUID = 1L;
 public HashMap<Integer, HashMap<Integer,edge_data/*edge*/>> Edges; 	
 public HashMap<Integer, node_data/*vertex*/> Vertices ;  	
 private int size_edges;
 private static int MC = 0;
-
-
 
 
 public DGraph()
@@ -32,33 +24,21 @@ public DGraph()
 }
 
 
-//public DGraph(DGraph gr1) 
-//{
-//	this.Edges.putAll(gr1.Edges);
-//	this.Vertices.putAll(gr1.Vertices);
-//	this.size_edges=gr1.size_edges;
-//	this.MC=gr1.MC;
-//	
-//}
-
-
 
 @Override
 public node_data getNode(int key) 
 {
-	//if (!(this.Vertices.get(key)==null))
+
 		return this.Vertices.get(key);
-	//else
-		//return null;
+
 }
 
 @Override
 public edge_data getEdge(int src, int dest) 
 {
-	//if (!(this.Edges.get(src).get(dest) == null))
+	
 		return (/*(edge_data)*/ (this.Edges.get(src).get(dest)));
-	//else
-		//return null;
+	
 }
 
 
@@ -176,39 +156,6 @@ public node_data removeNode(int key)
 
 	return VerAftDel;
 	
-	
-	
-	
-	
-	
-
-//	int toremove = 0;
-//	node_data vr;
-//	Collection<node_data> c =this.Vertices.values();
-//	Iterator<node_data> iter1 = c.iterator();
-//
-//	while(iter1.hasNext())  
-//	{
-//		vr = iter1.next();
-//		if(this.Edges.get(vr.getKey()).get(key)!=null) 
-//		{
-//			this.Edges.get(vr.getKey()).remove(key);
-//			size_edges--;	
-//		}
-//		
-//
-//	}
-//	
-//	MC++;
-//	
-//	
-//	if(this.Edges.get(key)!=null)
-//		 toremove = this.Edges.get(key).size();
-//	
-//	this.Edges.remove(key);
-//	size_edges =size_edges- toremove;
-//	return this.Vertices.remove(key);
-	
 }
 
 
@@ -244,17 +191,20 @@ public graph copy()
 	DGraph g = new DGraph();
 	Collection<node_data> v = Vertices.values();
 	Iterator<node_data> itr = v.iterator();
-	while(itr.hasNext()) {
+	while(itr.hasNext()) 
+	{
 		node_data n = itr.next();
 		g.addNode(n);
 	}
 	Collection<HashMap<Integer,edge_data>> e1 = Edges.values();
 	Iterator<HashMap<Integer,edge_data>> itr1 = e1.iterator();
-	while(itr1.hasNext()) {
+	while(itr1.hasNext()) 
+	{
 		HashMap<Integer, edge_data> h = itr1.next();
 		Collection<edge_data> e2 = h.values();
 		Iterator<edge_data> itr2 = e2.iterator();
-		while(itr2.hasNext()) {
+		while(itr2.hasNext()) 
+		{
 			edge_data edge = itr2.next();
 			g.connect(edge.getSrc(), edge.getDest(), edge.getWeight());
 		}

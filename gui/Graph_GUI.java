@@ -446,12 +446,14 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
+	public void mouseClicked(MouseEvent e) 
+	{
 		System.out.println("mouseClicked");
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
+	public void mousePressed(MouseEvent e) 
+	{
 		System.out.println("mousePressed");
 		System.out.println(e.getX()+" , "+e.getY());
 		Point3D r = new Point3D(e.getX(), e.getY(), 0);
@@ -461,17 +463,20 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
+	public void mouseReleased(MouseEvent e) 
+	{
 		System.out.println("mouseReleased");
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {
+	public void mouseEntered(MouseEvent e) 
+	{
 		System.out.println("mouseEntered");
 	}
 
 	@Override
-	public void mouseExited(MouseEvent e) {
+	public void mouseExited(MouseEvent e) 
+	{
 		System.out.println("mouseExited");
 	}
 }
