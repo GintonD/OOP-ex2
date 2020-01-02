@@ -1,11 +1,15 @@
 package dataStructure;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import utils.Point3D;
 
-public class vertex implements node_data 
+public class vertex implements node_data,Serializable 
 {
+
+	private static final long serialVersionUID = 1L;
+
 	public static int idBuilder=0;
 	
 	private  int key;
