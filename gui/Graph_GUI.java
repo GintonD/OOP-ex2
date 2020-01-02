@@ -28,15 +28,18 @@ import utils.*;
  * @author Ginton & fooxi
  */
 
-public class Graph_GUI extends JFrame implements ActionListener, MouseListener
+public class Graph_GUI extends JFrame implements ActionListener, MouseListener/*, Runnable*/
 {
 	
 	private static final long serialVersionUID = 1L;
 	private graph TempGraphGui;
+	static int mcGui=0; //*run
 	
 	public Graph_GUI(graph g)
 	{
 		initGUI(g);
+//		Thread t = new Thread(this);
+//		mcGui = this.TempGraphGui.getMC(); *run
 	}
 	
 	
@@ -167,11 +170,11 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 			
 //******************Init Random Graph******************************
 		case "Init Random Graph":
-			System.out.println("Init Random Graph:");
+			System.out.println("Init Random Graph..");
 			
-				dataStructure.vertex.idBuilder=0; //maybe delete
+				dataStructure.vertex.idBuilder=0; //maybe delete or change to the constructor
 				DGraph rg = new DGraph();
-				vertex[] v = new vertex[10];
+				vertex[] v = new vertex[4];
 				for(int i =0; i<v.length; i++) 
 				{
 					int rx = (int)(Math.random()*350+40);
@@ -194,6 +197,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 			break;	
 //***************Init Graph From File***************************************		
 		case "Init From File": 
+			System.out.println("Init From File:");
 			TempGrAl=new Graph_Algo();
 
 			jfc = new JFileChooser(FileSystemView.getFileSystemView());
@@ -212,6 +216,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 			
 //***************Save Graph to File***************************************
 		case "Save to File":  //not work because of save
+			System.out.println("Save to File:");
 			TempGrAl=new Graph_Algo((DGraph)this.TempGraphGui);		
 
 			jfc = new JFileChooser(FileSystemView.getFileSystemView());
@@ -228,7 +233,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 //************Shortest Path	*********************
 			
 		case "Shortest Path":
-			System.out.println("Shortest Path:\n");
+			System.out.println("Shortest Path:");
 			String StrPath="";
 			try {
 				JFrame sp = new JFrame();
@@ -265,13 +270,16 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 				Graph_Algo GSP = new Graph_Algo();
 				GSP.init(TempGraphGui);
 
-				List<node_data> SPList = GSP.shortestPath(src, dest);
-				
-				if(SPList.size()<2) //HAVE TO CHECK WHAT THE PROBLEM$$$$$$$$$$%%%%%
+				if(((GSP.shortestPathDist(src, dest)==Double.POSITIVE_INFINITY))/*||SPList.size()<2*/) //HAVE TO CHECK WHAT THE PROBLEM$$$$$$$$$$%%%%%
 				{
 					JOptionPane.showMessageDialog(sp,"There is no Path,\nThe Graph is NOT connect!!");
+					System.out.println("There is no Path,\nThe Graph is NOT connect!!");
 					break;
 				}
+				
+				List<node_data> SPList = GSP.shortestPath(src, dest);
+				
+			
 					
 				
 				graph gr_new=new DGraph();
@@ -297,7 +305,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 //***************Shortest Path Distance***************************
 			
 		case "Shortest Path Distance": 
-			System.out.println("Shortest Path Distance:\n");
+			System.out.println("Shortest Path Distance:");
 			
 			try {
 				JFrame sp = new JFrame();
@@ -347,7 +355,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 			
 //**********************TSP***********************************	
 		case "TSP": 
-			System.out.println("TSP");
+			System.out.println("TSP:");
 			JFrame TSPinput = new JFrame();
 			StrPath="";
 
@@ -407,7 +415,12 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 
 			Graph_Algo newGTSP = new Graph_Algo();
 			newGTSP.init(TempGraphGui);
-
+			if (newGTSP.TSP(TSPnodes)==null) 
+			{
+				JOptionPane.showMessageDialog(TSPinput,"There is no Path,\nThe Graph is NOT connect!!");
+				System.out.println("There is no Path,\nThe Graph is NOT connect!!");
+				break;
+			}
 			List<node_data> TSP = newGTSP.TSP(TSPnodes);
 			graph gr_new=new DGraph();
 
@@ -420,13 +433,14 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 			}
 
 			this.initGUI(gr_new);
-			JOptionPane.showMessageDialog(TSPinput,"The Short Path is:\n"+ StrPath);
-			System.out.println(StrPath);
+			JOptionPane.showMessageDialog(TSPinput,"The TSP Short Path is:\n"+ StrPath);
+			System.out.println("The TSP Short Path is:\n"+ StrPath);
 			break;
 
 			
 //*******************Is Conncected*******************
 		case "Is Conncected ":
+			System.out.println("Is Connected?:");
 			Graph_Algo algcon = new Graph_Algo();
 			algcon.init(this.TempGraphGui);
 			JFrame is = new JFrame();
@@ -444,19 +458,19 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 			
 		}
 	}
-
+//***********Optional leastions***********************88
 	@Override
 	public void mouseClicked(MouseEvent e) 
 	{
-		System.out.println("mouseClicked");
+		//System.out.println("mouseClicked");
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) 
 	{
-		System.out.println("mousePressed");
-		System.out.println(e.getX()+" , "+e.getY());
-		Point3D r = new Point3D(e.getX(), e.getY(), 0);
+		//System.out.println("mousePressed");
+		//System.out.println(e.getX()+" , "+e.getY());
+		//Point3D r = new Point3D(e.getX(), e.getY(), 0);
 		
 
 		this.repaint();
@@ -465,18 +479,37 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener
 	@Override
 	public void mouseReleased(MouseEvent e) 
 	{
-		System.out.println("mouseReleased");
+		//System.out.println("mouseReleased");
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) 
 	{
-		System.out.println("mouseEntered");
+			//System.out.println("mouseEntered");
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) 
 	{
-		System.out.println("mouseExited");
+		//System.out.println("mouseExited");
 	}
+
+
+//
+//	@Override   *run
+//	public void run() {
+//		while(true) {
+//			if(this.TempGraphGui.getMC() != mcGui) {
+//				mcGui=TempGraphGui.getMC();
+//				synchronized (this) {
+//					repaint();		
+//				}						
+//			}
+//			try {
+//				Thread.sleep(600);
+//			}
+//			catch (Exception e) {
+////			}
+//		}
+//	}
 }

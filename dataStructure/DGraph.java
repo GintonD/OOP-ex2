@@ -72,10 +72,9 @@ public void connect(int src, int dest, double w)  //one more!!!!!
 			size_edges++;
 			
 		}
-		//MC++;
+
 	}
-	//else
-	//	System.out.println("Error: the vertices can't connect!!"); //maybe throw here exception..
+
 }
 
 

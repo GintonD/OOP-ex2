@@ -12,6 +12,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -49,6 +50,11 @@ public class Graph_Algo implements graph_algorithms,Serializable
 	public Graph_Algo(DGraph g) 
 	{
 		this.graph_alg=g;
+	}
+	
+	public Graph_Algo(graph g) 
+	{
+		init(g);
 	}
 
 	@Override
@@ -110,6 +116,7 @@ public class Graph_Algo implements graph_algorithms,Serializable
 	@Override
 	public boolean isConnected() 
 	{
+		if (this.graph_alg.getV().size()<2) return true;
 		// Step 1: Mark all the vertices as not visited 
 		unvisited();
 		// Step 2: Do DFS traversal starting from first vertex. 
@@ -138,27 +145,30 @@ public class Graph_Algo implements graph_algorithms,Serializable
 	@Override
 	public double shortestPathDist(int src, int dest) 
 	{
-		if (isConnected(src, dest)) 
-		{
+//		if (isConnected(src, dest)) 
+//		{
 		Dijkstras2(src, dest);
 		
 		return this.graph_alg.getNode(dest).getWeight();
-		}
-		else 
-		{
-			System.out.println("isnot connected");
-
-			return Double.MAX_VALUE;
-		}
+//		}
+//		else 
+//		{
+//			System.out.println("isnot connected");
+//
+//			return Double.MAX_VALUE;
+//		}
 	}
 
-//	
+	
 	@Override
 	public List<node_data> shortestPath(int src, int dest) 
 	{
+//		if (shortestPathDist(src, dest)== Double.POSITIVE_INFINITY) {
+//			return null;
+//		}
 		LinkedList<node_data> list = new LinkedList<node_data>();
-		if (isConnected(src, dest)) 
-		{
+//		if (isConnected(src, dest)) 
+//		{
 			Dijkstras2(src, dest);		
 			String path_List =this.graph_alg.getNode(dest).getInfo();
 			String [] splitArr = path_List.split(" ");
@@ -171,13 +181,78 @@ public class Graph_Algo implements graph_algorithms,Serializable
 			
 				
 			return list;
-		}
-		else 
-		{
-		System.out.println("isn't connected");
-		return list;
-		}
+//		}
+//		else 
+//		{
+//		System.out.println("isn't connected");
+//		return list;
+//		}
 	}
+	
+	
+
+//	@Override
+//	public List<node_data> shortestPath(int src, int dest) {
+//		if(graph_alg.getNode(src)==null || graph_alg.getNode(dest)==null)
+//			return null;
+//		try {
+//			ArrayList<node_data> ans = new ArrayList<node_data>();
+//			if(graph_alg.getNode(src).equals(graph_alg.getNode(dest))) {
+//				ans.add(graph_alg.getNode(src));
+//				return ans;
+//			}
+//			PriorityQueue <node_data> notVisited = new PriorityQueue <node_data> (graph_alg.nodeSize(),new The_Comparator());
+//			Collection<node_data> c = graph_alg.getV();
+//			Iterator<node_data> itr = c.iterator();
+//			while(itr.hasNext()) {
+//				node_data n = itr.next();
+//				if(n.getKey()==src) {
+//					n.setWeight(0);
+//
+//				} else {
+//					n.setWeight(Integer.MAX_VALUE);
+//
+//				}
+//				n.setInfo("");
+//				n.setTag(0);
+//				notVisited.add(n);
+//			}
+//			while(!notVisited.isEmpty()) {
+//				//			System.out.println("src:"+src+", dest: "+dest+" pq: "+notVisited);
+//				node_data n = notVisited.poll();
+//				if(n.getKey()==dest && !n.getInfo().equals("")) {
+//					ans.add(n);
+//					while(!n.getInfo().equals("")) {
+//						node_data newNode = graph_alg.getNode(Integer.parseInt(n.getInfo()));
+//						ans.add(0, newNode);
+//						n = newNode;
+//					}
+//					//				ans.sort(new Node_Comparator());
+//					return ans;	
+//				}
+//				Collection<edge_data> outOfn = graph_alg.getE(n.getKey());
+//				Iterator<edge_data> itr2 = outOfn.iterator();
+//				while(itr2.hasNext()) {
+//					edge_data edge = itr2.next();
+//					node_data d = graph_alg.getNode(edge.getDest());
+//					if(d.getTag()==0) {
+//						if(d.getWeight()>(n.getWeight() + edge.getWeight())) {
+//							d.setWeight(n.getWeight() + edge.getWeight());
+//							d.setInfo(""+n.getKey());
+//							notVisited.remove(d);
+//							notVisited.add(d);
+//						} 
+//					}	
+//				}
+//				n.setTag(1);
+//			}
+//			return null;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return null;
+//	}
+	
 	
 	@Override
 	public List<node_data> TSP(List<Integer> targets) 
@@ -196,6 +271,7 @@ public class Graph_Algo implements graph_algorithms,Serializable
 			listTsp.add(this.graph_alg.getNode(key));
 			return listTsp;
 		}
+		//
 		int src=0;
 		for (int i=0; i<targets.size()-1; i++) 
 		{
@@ -204,6 +280,9 @@ public class Graph_Algo implements graph_algorithms,Serializable
 			if (!(exsictVertex(src, dest))) //the src or dest doesnt exsict
 				return null;
 			// save a list from i to i+1
+			if (shortestPathDist(src, dest)== Double.POSITIVE_INFINITY) {
+				return null;
+			}
 			List<node_data> list_ShortPath	= shortestPath(src, dest);
 			src = dest;
 			for (int j = 0; j < list_ShortPath.size()-1; j++) 
@@ -254,6 +333,7 @@ public class Graph_Algo implements graph_algorithms,Serializable
 		
 	private int dfs_tovertex(node_data node,int dest) 
 	{
+		
 		node.setTag(1); //visited 
 		if (node.getKey()==dest) 
 		{ 
