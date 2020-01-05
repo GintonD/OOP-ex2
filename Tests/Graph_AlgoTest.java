@@ -97,13 +97,13 @@ class Graph_AlgoTest
 	void testInitString() 
 	{
 		graph actual = ga.copy();
-		ga.save("src/graph");
-		ga.init("src/graph");
+		ga.save("graph");
+		ga.init("graph");
 		graph expected = ga.copy(); 
 		ga.init(connected);
 		actual = ga.copy();
-		ga.save("src/graph");
-		ga.init("src/graph");
+		ga.save("graph");
+		ga.init("graph");
 		expected = ga.copy();
 		
 	}

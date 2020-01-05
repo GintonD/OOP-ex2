@@ -60,65 +60,6 @@ public class GUI_Test {
 
 		Graph_GUI a = new Graph_GUI(g);
 		a.setVisible(true);
-		int c=0;
-		for(int i=0;i<1000000000;i++)
-			System.out.println(i);
-		
-//		graph g =create();
-//		Graph_GUI test =new Graph_GUI(g);
-//
-//		test.setVisible(true);
 	}
-	
-	
-//	public static graph create () 
-//	{
-//		DGraph graph_test = new DGraph();
-//		vertex prev = null;
-//
-//
-//		for (int i=0; i<6 ;i++)
-//		{
-//			Point3D point= new Point3D(i*100+100, i*100+100); 
-//			vertex vertex_Test = new vertex(point); //create vertex
-//			graph_test.addNode(vertex_Test);
-//			if (prev!= null) 
-//			{
-//				edge test_edge = new edge(vertex_Test.getKey(),prev.getKey(), 5); //create edge
-//				graph_test.connect(vertex_Test.getKey(),prev.getKey(), 5); //connect edge to vertex
-//				
-//			}
-//			if (graph_test.edgeSize()%2==0 &&graph_test.edgeSize()>0)
-//				graph_test.connect(vertex_Test.getKey(),2, 5);
-//			prev = vertex_Test ; //save the prev
-//		}
-//			
-//			
-//		
-//		return graph_test;
-//	
-//	}
-//	
-	
-//	public static graph create () 
-//	{
-//		DGraph gr = new DGraph();
-//		vertex[] v = new vertex[3];
-//		for(int i =0; i<v.length; i++) {
-//			int rx = (int)(Math.random()*350+40);
-//			int ry = (int)(Math.random()*350+80);
-//			Point3D p =new Point3D(rx,ry);
-//			v[i] = new vertex(p);
-//			gr.addNode(v[i]);
-//		}
-//		for(int i = 1; i<Math.pow(v.length, 2); i++) {
-//			int rs = (int)(Math.random()*v.length);
-//			int rf = (int)(Math.random()*v.length);
-//			int w = (int)(Math.random()*50);
-//			gr.connect(v[rs].getKey(), v[rf].getKey(), w);
-//		}
-//		return gr;
-//}
-//	
 }
 

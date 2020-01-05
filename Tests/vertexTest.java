@@ -22,7 +22,7 @@ class vertexTest
 	assertEquals (2, test.getWeight());
 	// assert point
 	assertEquals(p, test.getLocation());
-	// assert 
+	 
 	
 	}
 

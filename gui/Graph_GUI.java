@@ -25,7 +25,7 @@ import dataStructure.*;
 import utils.*;
 
 /**
- * @author Ginton & fooxi
+ * @author Ginton & fuchs
  */
 
 public class Graph_GUI extends JFrame implements ActionListener, MouseListener, Runnable
