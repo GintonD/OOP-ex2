@@ -8,7 +8,7 @@ import gui.Graph_GUI;
 
 import utils.Point3D;
 
-public class GUI_test {
+public class GUI_Test {
 	public static void main(String[] args) 
 	{
 		Point3D p1 = new Point3D(99, 95);
