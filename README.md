@@ -1,5 +1,5 @@
 # OOP- ex2 The Maze of Waze
-Authors Meir fuchs && Ginton
+Authors Meir fuchs && Ginton Durlacher
 
 The project describes a graph when every edge has a weight. 
 example for graph here:
@@ -35,4 +35,4 @@ TSP: computes a relatively short path which visit each node in the targets List.
  
  Isconnected: screen tell you if in this graph you can go from each vertex to other.
  
-is 
+
