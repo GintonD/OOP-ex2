@@ -125,8 +125,15 @@ public class Graph_Algo implements graph_algorithms,Serializable
 
 // we need to increase id that deal eith null !!
 		
-		
-			dfs ( this.graph_alg.getNode(1));
+		Iterator<node_data> verItr = graph_alg.getV().iterator();
+//	Collection<node_data> collectNode = 
+//		node_data verFirst = graph_alg.ge
+		int index = 1;
+//		node_data node_first
+		while (graph_alg.getNode(index)==null) {
+			index++;
+		}
+			dfs ( this.graph_alg.getNode(index));
 		// If DFS traversal doesn't visit all vertices, then 
 		// return false. 
 		Collection<node_data> vertex_collect = this.graph_alg.getV();
@@ -139,7 +146,7 @@ public class Graph_Algo implements graph_algorithms,Serializable
 		for (node_data vertex: vertex_collect) 
 		{
 			unvisited();
-			if  (dfs_tovertex(vertex,1)==0)
+			if  (dfs_tovertex(vertex,index)==0)
 				return false;
 		}
 		return true;
@@ -285,7 +292,7 @@ public class Graph_Algo implements graph_algorithms,Serializable
 		node.setTag(1); //visited 
 		if (node.getKey()==dest) 
 		{ 
-			this.graph_alg.getNode(1).setTag(1);
+			this.graph_alg.getNode(dest).setTag(1);
 			return 1;
 		}
 		Collection<edge_data> edge_collect = this.graph_alg.getE(node.getKey()); // the collect edge of current vertex
@@ -297,7 +304,7 @@ public class Graph_Algo implements graph_algorithms,Serializable
 				dfs_tovertex(this.graph_alg.getNode(next_vertex),dest);
 
 		}
-		return this.graph_alg.getNode(1).getTag() ;
+		return this.graph_alg.getNode(dest).getTag() ;
 	}
 	
 	
