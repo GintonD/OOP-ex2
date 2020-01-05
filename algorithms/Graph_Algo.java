@@ -1,26 +1,17 @@
 
 package algorithms;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.PriorityQueue;
-
 import dataStructure.DGraph;
 import dataStructure.edge;
 import dataStructure.edge_data;
@@ -31,7 +22,7 @@ import utils.Point3D;
 /**
  * This empty class represents the set of graph-theory algorithms
  * which should be implemented as part of Ex2 - Do edit this class.
- * @author 
+ * @author Ginton& fooxi 
  *
  */
 public class Graph_Algo implements graph_algorithms,Serializable
@@ -41,13 +32,15 @@ public class Graph_Algo implements graph_algorithms,Serializable
 	private DGraph graph_alg;
 	
 	
-	//
-//	constractur
+	
+//	Enpty constructor
 	public Graph_Algo () 
 	{
 		graph_alg = new DGraph();
 	}
-	
+
+
+//	Constructors from Graph
 	public Graph_Algo(DGraph g) 
 	{
 		this.graph_alg=g;
@@ -57,7 +50,12 @@ public class Graph_Algo implements graph_algorithms,Serializable
 	{
 		init(g);
 	}
-
+	
+	
+	/**
+	 * Init this set of algorithms on the parameter - graph.
+	 * @param g - graph
+	 */
 	@Override
 	public void init(graph g) 
 	{
@@ -68,6 +66,13 @@ public class Graph_Algo implements graph_algorithms,Serializable
 		throw new RuntimeException("Error: can't init Graph_Algo!!");
 	}
 
+	
+	
+	
+	/**
+	 * Init a graph from file
+	 * @param file_name
+	 */	
 	@Override
 	public void init(String file_name) 
 	{
@@ -85,7 +90,12 @@ public class Graph_Algo implements graph_algorithms,Serializable
 
 	}
 	
-
+	
+	
+	/** Saves the graph to a file.
+	 * 
+	 * @param file_name
+	 */
 	@Override
 	public void save(String file_name) 
 	{
@@ -104,7 +114,13 @@ public class Graph_Algo implements graph_algorithms,Serializable
 		
 	}
 
-
+	
+	
+	/**
+	 * Returns true if and only if (iff) there is a valid path from EVREY node to each
+	 * other node. NOTE: assume directional graph - a valid path (a-->b) does NOT imply a valid path (b-->a).
+	 * @return
+	 */
 	
 	@Override
 	public boolean isConnected() 
@@ -114,11 +130,9 @@ public class Graph_Algo implements graph_algorithms,Serializable
 		unvisited();
 		// Step 2: Do DFS traversal starting from first vertex. 
 
-// we need to increase id that deal eith null !!
 		
 		Iterator<node_data> verItr = graph_alg.getV().iterator();
-//	Collection<node_data> collectNode = 
-//		node_data verFirst = graph_alg.ge
+
 		int index = 1;
 //		node_data node_first
 		while (graph_alg.getNode(index)==null) {
@@ -146,52 +160,60 @@ public class Graph_Algo implements graph_algorithms,Serializable
 	
 
 
-	
+	/**
+	 * returns the length of the shortest path between src to dest
+	 * @param src - start node
+	 * @param dest - end (target) node
+	 * @return distance
+	 */
 	@Override
 	public double shortestPathDist(int src, int dest) 
 	{
-
 		Dijkstras2(src, dest);
 		
 		return this.graph_alg.getNode(dest).getWeight();
-
-//		}
 	}
 
 
+	
+	/**
+	 * returns the the shortest path between src to dest - as an ordered List of nodes:
+	 * src--> n1-->n2-->...dest
+	 * see: https://en.wikipedia.org/wiki/Shortest_path_problem
+	 * @param src - start node
+	 * @param dest - end (target) node
+	 * @return list of verticies of the path
+	 */
 	@Override
 	public List<node_data> shortestPath(int src, int dest) 
 	{
 
-//		}
 		LinkedList<node_data> list = new LinkedList<node_data>();
 
-			Dijkstras2(src, dest);		// go to algorithm
+			Dijkstras2(src, dest);		
 			String path_List =this.graph_alg.getNode(dest).getInfo();
 			String [] splitArr = path_List.split(" ");
-			// insert to list
 			for (int i = 0; i < splitArr.length; i++) 
 			{
 				int key = Integer.parseInt(splitArr[i]);
 				list.add(this.graph_alg.getNode(key));
-			}
-				
-			
-				
+			}	
 			return list;
-//		}
-//		else 
-//		{
-//		System.out.println("isn't connected");
-//		return list;
-//		}
+
 	}
 	
 	
 
 
 	
-	
+	/**
+	 * computes a relatively short path which visit each node in the targets List.
+	 * Note: this is NOT the classical traveling salesman problem, 
+	 * as you can visit a node more than once, and there is no need to return to source node - 
+	 * just a simple path going over all nodes in the list. 
+	 * @param targets rquire
+	 * @return list of verticies of the path with all tergets
+	 */
 	@Override
 	public List<node_data> TSP(List<Integer> targets) 
 	{
@@ -230,6 +252,7 @@ public class Graph_Algo implements graph_algorithms,Serializable
 				key = list_ShortPath.get(j).getKey();
 				if ((targets.contains(key))) 
 				{
+//					targets.remove(key); //FOR WHAT ITZ?
 					
 				}
 				listTsp.add(node);
@@ -239,7 +262,10 @@ public class Graph_Algo implements graph_algorithms,Serializable
 		return listTsp;
 	}
 	
-	
+	/** 
+	 * Compute a deep copy of this graph.
+	 * @return
+	 */	
 	@Override
 	public graph copy() 
 	{
@@ -255,7 +281,7 @@ public class Graph_Algo implements graph_algorithms,Serializable
 			Collection<node_data> vertex_collect = this.graph_alg.getV();
 			for (node_data vertex: vertex_collect) 
 			{
-				vertex.setWeight(Double.POSITIVE_INFINITY); //vertex.setWeight(2000);
+				vertex.setWeight(Double.POSITIVE_INFINITY); 
 			}
 		}
 		
@@ -306,6 +332,20 @@ public class Graph_Algo implements graph_algorithms,Serializable
 		}
 	}
 
+	
+
+	
+	// algoritem dijkstras - see more wikipedia https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Algorithm
+	/*   1. Mark all nodes unvisited and infinity weight
+	 *   2. Set it to zero for our initial node and to infinity for all other nodes 
+	 * 	 3. For the current node, consider all of its unvisited neighbours and calculate their tentative distances through the current node.
+	 * 	 4.When we are done considering all of the unvisited neighbours of the current node, mark the current node as visited.
+	 * 5. If the destination node has been marked visited 
+	 *  (when planning a route between two specific nodes) or if the smallest tentative distance. then stop.
+	 *  6. Otherwise, select the unvisited node that is marked with the smallest tentative 
+	 *  distance, set it as the new "current node", and go back to step 3.
+	 *
+	 */
 public void Dijkstras2 (int src, int dest)
 {
 	unvisited();
@@ -322,13 +362,14 @@ public void Dijkstras2 (int src, int dest)
 	
 	while (!queueOfList.isEmpty() && this.graph_alg.getNode(dest).getTag()==0) 
 	{
-		queueOfList.sort(comp); //
+		queueOfList.sort(comp); // O(n) i try to that with Heap and then is Log n
 		node_data v1 = queueOfList.get(0);
 		// Visit each edge exiting vertex
 		for (edge_data edge : this.graph_alg.getE(v1.getKey())) 
 		{
 			node_data v2 = this.graph_alg.getNode(edge.getDest());
 			// add to queue for next check
+
 			if (v2.getTag()==0) 
 			{ //unvisited 
 				
@@ -337,6 +378,7 @@ public void Dijkstras2 (int src, int dest)
 			{
 				v2.setWeight(distV2);
 				v2.setInfo(v1.getInfo()+ " " + v2.getKey());
+
 			}
 			}
 		}
@@ -359,19 +401,20 @@ private boolean exsictVertex (int src, int dest)
 }
 
 
+
+
 class The_Comparator implements Comparator<node_data> 
 { 
 
 	@Override
 	public int compare(node_data arg0, node_data arg1) 
 	{
-
-		if (arg0.getWeight()>arg1.getWeight()) return 1;
-		if (arg0.getWeight()<arg1.getWeight()) return -1;
-
-		return 0;
+		return (int)(arg0.getWeight()-arg1.getWeight());
 	}
 }
 	
 	
+
+	
+
 } 

@@ -15,7 +15,9 @@ public HashMap<Integer, node_data/*vertex*/> Vertices ;
 private int size_edges;
 private static int MC = 0;
 
-
+/**
+ * Constructor
+ */
 public DGraph()
 {
 	this.Edges=	new HashMap<Integer, HashMap<Integer,edge_data>>();
@@ -26,33 +28,65 @@ public DGraph()
 
 
 
+
+/**
+ * return the node_data by the node_id,
+ * @param key - the node_id
+ * @return the node_data by the node_id, null if none.
+ */
 @Override
 public node_data getNode(int key) 
 {
 
-		return this.Vertices.get(key);
+	return this.Vertices.get(key);
 
 }
 
+
+
+
+/**
+ * return the data of the edge (src,dest), null if none.
+ * Note: this method should run in O(1) time.
+ * @param src
+ * @param dest
+ * @return
+ */
 @Override
 public edge_data getEdge(int src, int dest) 
 {
 	
-		return (/*(edge_data)*/ (this.Edges.get(src).get(dest)));
+	return ( (this.Edges.get(src).get(dest)));
 	
 }
 
 
+
+
+/**
+ * add a new node to the graph with the given node_data.
+ * Note: this method should run in O(1) time.
+ * @param n
+ */
 @Override
 public void addNode(node_data n) 
 {
-	this.Vertices.put(n.getKey(),  n); //maybe n shuld cast to vertex
+	this.Vertices.put(n.getKey(),  n);
 	MC++; 
-	this.Edges.put(n.getKey(), new HashMap<Integer, edge_data>());  //maybe is needed?
+	this.Edges.put(n.getKey(), new HashMap<Integer, edge_data>());  
 	
 }
+
+
+/**
+ * Connect an edge with weight w between node src to node dest.
+ * * Note: this method should run in O(1) time.
+ * @param src - the source of the edge.
+ * @param dest - the destination of the edge.
+ * @param w - positive weight representing the cost (aka time, price, etc) between src-->dest.
+ */
 @Override
-public void connect(int src, int dest, double w)  //one more!!!!!
+public void connect(int src, int dest, double w)  
 {
 	if(this.Vertices.get(src)!=null && Vertices.get(dest)!=null) 
 	{
@@ -71,6 +105,7 @@ public void connect(int src, int dest, double w)  //one more!!!!!
 			
 			this.Edges.get(src).put(dest, NewEdge);
 			size_edges++;
+			MC++;
 			
 		}
 
@@ -99,6 +134,7 @@ public Collection<node_data> getV()
 
 
 
+
 /**
  * This method return a pointer (shallow copy) for the
  * collection representing all the edges getting out of 
@@ -109,14 +145,19 @@ public Collection<node_data> getV()
 @Override
 public Collection<edge_data> getE(int node_id) //one more!!!!!
 {
-//	if (this.Edges.isEmpty())
-	//	return null; 
-	//if (this.Edges.get(node_id)==null)
-	//return null;
 	return this.Edges.get(node_id).values();
 }
 
 
+
+
+/**
+ * Delete the node (with the given ID) from the graph -
+ * and removes all edges which starts or ends at this node.
+ * This method should run in O(n), |V|=n, as all the edges should be removed.
+ * @return the data of the removed node (null if none). 
+ * @param key
+ */
 @Override
 public node_data removeNode(int key) 
 {
@@ -159,6 +200,15 @@ public node_data removeNode(int key)
 }
 
 
+
+
+/**
+ * Delete the edge from the graph, 
+ * Note: this method should run in O(1) time.
+ * @param src
+ * @param dest
+ * @return the data of the removed edge (null if none).
+ */
 @Override
 public edge_data removeEdge(int src, int dest) 
 {
@@ -168,24 +218,50 @@ public edge_data removeEdge(int src, int dest)
 }
 
 
+
+
+/** return the number of vertices (nodes) in the graph.
+ * Note: this method should run in O(1) time. 
+ * @return
+ */
 @Override
 public int nodeSize() 
 {
 	return this.Vertices.size();
 }
 
+
+
+
+
+/** 
+ * return the number of edges (assume directional graph).
+ * Note: this method should run in O(1) time.
+ * @return
+ */
 @Override
 public int edgeSize() 
 {
 	return this.size_edges;
 }
 
+
+
+/**
+ * return the Mode Count - for testing changes in the graph.
+ * @return
+ */
 @Override
 public int getMC() 
 {
 	return MC;
 }
 
+
+/** 
+ * Compute a deep copy of this graph.
+ * @return copy of the current graph
+ */
 public graph copy() 
 {
 	DGraph g = new DGraph();
@@ -215,6 +291,12 @@ public graph copy()
 }
 
 
+
+/**
+ * Check if the vertex is exist
+ * @param k
+ * @return true or false
+ */
 public boolean VertexIsExist(int k) 
 {
 	if (this.Vertices.containsKey(k))
@@ -222,6 +304,13 @@ public boolean VertexIsExist(int k)
 	return false;
 }
 
+
+/**
+ * Check if the Edges is exist
+ * @param s - source
+ * @param d - derstination
+ * @return true or false.
+ */
 public boolean EdgeIsExist(int s, int d) 
 {
 	if (this.Edges.containsKey(s)) 

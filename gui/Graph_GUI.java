@@ -11,12 +11,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
 
@@ -28,22 +28,26 @@ import utils.*;
  * @author Ginton & fooxi
  */
 
-public class Graph_GUI extends JFrame implements ActionListener, MouseListener/*, Runnable*/
+public class Graph_GUI extends JFrame implements ActionListener, MouseListener, Runnable
 {
 	
 	private static final long serialVersionUID = 1L;
 	private graph TempGraphGui;
 	private graph OriginalGraph;
-	static int mcGui=0; //*run
+	static int mcGui=0; 
+
 	
 	public Graph_GUI(graph g)
 	{
 		this.OriginalGraph=(DGraph)g;
 		this.TempGraphGui=(DGraph)g;
 		
+		
+		mcGui = this.TempGraphGui.getMC(); 
+		Thread t = new Thread(this);
+		t.start();
 		initGUI(g);
-//		Thread t = new Thread(this);
-//		mcGui = this.TempGraphGui.getMC(); *run
+		
 	}
 	
 	
@@ -63,9 +67,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener/*
 		
 		Menu alg  = new Menu("Algorithms ");
 		menuBar.add(alg);
-		
-//		Menu Create = new Menu("Create ");
-//		menuBar.add(Create);
+
 		
 //**************New button*****************		
 		MenuItem item1 = new MenuItem("Return To Original Graph");
@@ -105,15 +107,6 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener/*
 		
 		this.addMouseListener(this);
 		
-		//**************Create button*****************
-
-//		MenuItem item10 = new MenuItem("Add Vertex");
-//		item10.addActionListener(this);
-//		Create.add(item10);
-//		
-//		MenuItem item11 = new MenuItem("connect");
-//		item11.addActionListener(this);
-//		Create.add(item11);
 	}
 	
 	
@@ -126,7 +119,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener/*
 		{
 			//get nodes
 			Collection<node_data> nodes = TempGraphGui.getV();
-			
+
 			for (node_data n : nodes) 
 			{
 				//draw nodes
@@ -176,11 +169,12 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener/*
 		String str = Command.getActionCommand();		
 		Graph_Algo TempGrAl=new Graph_Algo();
 		JFileChooser jfc;
-		FileNameExtensionFilter filter;
+		
+		//FileNameExtensionFilter filter;
 		
 		switch(str) 
 		{
-//***************Init Graph***************************************
+//***************Return To Original Graph***************************************
 		case "Return To Original Graph": 
 			System.out.println("Init Graph:");
 			initGUI(this.OriginalGraph);
@@ -235,7 +229,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener/*
 			break;		
 			
 //***************Save Graph to File***************************************
-		case "Save to File":  //not work because of save
+		case "Save to File":  
 			System.out.println("Save to File:");
 			TempGrAl=new Graph_Algo((DGraph)this.TempGraphGui);		
 
@@ -380,7 +374,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener/*
 			JFrame TSPinput = new JFrame();
 			StrPath="";
 
-			String SourceNodeTSP = JOptionPane.showInputDialog(TSPinput,"How many nodes ?");
+			String SourceNodeTSP = JOptionPane.showInputDialog(TSPinput,"How many Vertices ?:");
 			int manyTSP=1;
 			try 
 			{
@@ -388,19 +382,19 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener/*
 			} 
 			catch (NumberFormatException e) 
 			{
-				JOptionPane.showMessageDialog(TSPinput, "Ilegal number of nodes.");
+				JOptionPane.showMessageDialog(TSPinput, "Ilegal number of Vertices.");
 				break;
 			}
 			if (manyTSP<1 || manyTSP>this.TempGraphGui.nodeSize()) 
 			{
-				JOptionPane.showMessageDialog(TSPinput, "Ilegal number of nodes.");
+				JOptionPane.showMessageDialog(TSPinput, "Ilegal number of Vertices.");
 				break;
 			}
 
 			int cmon=0;
 			if (manyTSP==1) 
 			{
-				SourceNodeTSP = JOptionPane.showInputDialog(TSPinput,"Enter node-key");
+				SourceNodeTSP = JOptionPane.showInputDialog(TSPinput,"Enter Vertex-key:");
 				try 
 				{
 					cmon = Integer.parseInt(SourceNodeTSP);
@@ -420,7 +414,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener/*
 			List<Integer> TSPnodes = new ArrayList<Integer>();
 			int TSPkey=0;
 			for (int i=0; i<manyTSP; i++) {
-				SourceNodeTSP = JOptionPane.showInputDialog(TSPinput,"Enter node-key "+(i+1)+"/"+manyTSP);
+				SourceNodeTSP = JOptionPane.showInputDialog(TSPinput,"Enter Vertex-key:  "+(i+1)+"/"+manyTSP);
 				try {
 					TSPkey = Integer.parseInt(SourceNodeTSP);
 				} catch (NumberFormatException e) {
@@ -454,8 +448,6 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener/*
 					TSPGraph.addNode(TSP.get(i));	
 				if (!((DGraph)TSPGraph).EdgeIsExist(TSP.get(i-1).getKey(), TSP.get(i).getKey())) 
 					TSPGraph.connect(TSP.get(i-1).getKey(), TSP.get(i).getKey(), this.TempGraphGui.getEdge(TSP.get(i-1).getKey(), TSP.get(i).getKey()).getWeight());
-//				gr_new.addNode(TSP.get(i));
-//				gr_new.connect(TSP.get(i-1).getKey(), TSP.get(i).getKey(), this.TempGraphGui.getEdge(TSP.get(i-1).getKey(), TSP.get(i).getKey()).getWeight());
 				StrPath=StrPath+("->"+TSP.get(i).getKey());
 			}
 
@@ -484,6 +476,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener/*
 			}
 			break;
 			
+
 		}
 	}
 //***********Optional leastions***********************88
@@ -497,11 +490,6 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener/*
 	public void mousePressed(MouseEvent e) 
 	{
 		//System.out.println("mousePressed");
-		//System.out.println(e.getX()+" , "+e.getY());
-		//Point3D r = new Point3D(e.getX(), e.getY(), 0);
-		
-
-		this.repaint();
 	}
 
 	@Override
@@ -523,21 +511,29 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener/*
 	}
 
 
-//
-//	@Override   *run
-//	public void run() {
-//		while(true) {
-//			if(this.TempGraphGui.getMC() != mcGui) {
-//				mcGui=TempGraphGui.getMC();
-//				synchronized (this) {
-//					repaint();		
-//				}						
-//			}
-//			try {
-//				Thread.sleep(600);
-//			}
-//			catch (Exception e) {
-////			}
-//		}
-//	}
+
+	@Override   
+	public void run() 
+	{
+		while(true) 
+		{
+			if(this.TempGraphGui.getMC() != mcGui) 
+			{
+				mcGui=TempGraphGui.getMC();
+				synchronized (this) 
+				{
+					this.repaint();		
+				}						
+			}
+			try {
+				Thread.sleep(600);
+			}
+			catch (Exception e)
+			{
+
+		}
+	}
+}
+	
+
 }

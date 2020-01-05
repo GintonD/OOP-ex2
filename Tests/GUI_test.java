@@ -45,16 +45,24 @@ public class GUI_test {
 		g.connect(n4.getKey(), n3.getKey(), 3.55);
 		g.connect(n7.getKey(), n4.getKey(), 42);
 		g.connect(n1.getKey(), n5.getKey(), 23);
-		g.connect(n6.getKey(), n2.getKey(), 4.20);
+		g.connect(n6.getKey(), n2.getKey(), 4330);
 		g.connect(n7.getKey(), n8.getKey(), 4235);
 		g.connect(n8.getKey(), n5.getKey(), 4235);
-		g.connect(n8.getKey(), n7.getKey(), 4235);
+		g.connect(n8.getKey(), n7.getKey(), 45435);
 		g.connect(n4.getKey(), n7.getKey(), 45);
 		g.connect(n3.getKey(), n1.getKey(), 4235);
 		g.connect(n5.getKey(), n6.getKey(), 4.20);
+		
+//		Point3D p10 = new Point3D(391, 222);
+//		vertex n10 = new vertex(p10, 74744);
+//		g.addNode(n10);
+//		
 
 		Graph_GUI a = new Graph_GUI(g);
 		a.setVisible(true);
+		int c=0;
+		for(int i=0;i<1000000000;i++)
+			System.out.println(i);
 		
 //		graph g =create();
 //		Graph_GUI test =new Graph_GUI(g);

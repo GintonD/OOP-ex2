@@ -19,11 +19,12 @@ public edge (int Source, int Dest, double  weight)
 	this.weight = weight;
 }
 
-	public edge(edge edge) {
-	this.Src=edge.getSrc();
-	this.Dest=edge.getDest();
-	this.weight=edge.getWeight();
-}
+//	public edge(edge edge) 
+//{
+//	this.Src=edge.getSrc();
+//	this.Dest=edge.getDest();
+//	this.weight=edge.getWeight();
+//}
 
 	@Override
 	public int getSrc() 
@@ -32,12 +33,14 @@ public edge (int Source, int Dest, double  weight)
 	}
 
 	@Override
-	public int getDest() {
+	public int getDest() 
+	{
 		return this.Dest;
 	}
 
 	@Override
-	public double getWeight() {
+	public double getWeight() 
+	{
 		return this.weight;
 	}
 
