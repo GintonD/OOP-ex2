@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 import dataStructure.DGraph;
+import dataStructure.edge;
 import dataStructure.edge_data;
 import dataStructure.graph;
 import dataStructure.node_data;
@@ -107,6 +108,7 @@ public class Graph_Algo implements graph_algorithms,Serializable
 	{
 		// Step 1: Mark all the vertices as not visited 
 //		if (exsictVertex(src, dest))
+				
 				if (dfs_tovertex(this.graph_alg.getNode(src), dest)==1)
 					return true;
 				return false;
@@ -120,7 +122,11 @@ public class Graph_Algo implements graph_algorithms,Serializable
 		// Step 1: Mark all the vertices as not visited 
 		unvisited();
 		// Step 2: Do DFS traversal starting from first vertex. 
-		dfs ( this.graph_alg.getNode(1));
+
+// we need to increase id that deal eith null !!
+		
+		
+			dfs ( this.graph_alg.getNode(1));
 		// If DFS traversal doesn't visit all vertices, then 
 		// return false. 
 		Collection<node_data> vertex_collect = this.graph_alg.getV();
@@ -138,6 +144,7 @@ public class Graph_Algo implements graph_algorithms,Serializable
 		}
 		return true;
 	}
+	
 	
 
 
@@ -159,7 +166,7 @@ public class Graph_Algo implements graph_algorithms,Serializable
 //		}
 	}
 
-	
+
 	@Override
 	public List<node_data> shortestPath(int src, int dest) 
 	{
@@ -191,72 +198,13 @@ public class Graph_Algo implements graph_algorithms,Serializable
 	
 	
 
-//	@Override
-//	public List<node_data> shortestPath(int src, int dest) {
-//		if(graph_alg.getNode(src)==null || graph_alg.getNode(dest)==null)
-//			return null;
-//		try {
-//			ArrayList<node_data> ans = new ArrayList<node_data>();
-//			if(graph_alg.getNode(src).equals(graph_alg.getNode(dest))) {
-//				ans.add(graph_alg.getNode(src));
-//				return ans;
-//			}
-//			PriorityQueue <node_data> notVisited = new PriorityQueue <node_data> (graph_alg.nodeSize(),new The_Comparator());
-//			Collection<node_data> c = graph_alg.getV();
-//			Iterator<node_data> itr = c.iterator();
-//			while(itr.hasNext()) {
-//				node_data n = itr.next();
-//				if(n.getKey()==src) {
-//					n.setWeight(0);
-//
-//				} else {
-//					n.setWeight(Integer.MAX_VALUE);
-//
-//				}
-//				n.setInfo("");
-//				n.setTag(0);
-//				notVisited.add(n);
-//			}
-//			while(!notVisited.isEmpty()) {
-//				//			System.out.println("src:"+src+", dest: "+dest+" pq: "+notVisited);
-//				node_data n = notVisited.poll();
-//				if(n.getKey()==dest && !n.getInfo().equals("")) {
-//					ans.add(n);
-//					while(!n.getInfo().equals("")) {
-//						node_data newNode = graph_alg.getNode(Integer.parseInt(n.getInfo()));
-//						ans.add(0, newNode);
-//						n = newNode;
-//					}
-//					//				ans.sort(new Node_Comparator());
-//					return ans;	
-//				}
-//				Collection<edge_data> outOfn = graph_alg.getE(n.getKey());
-//				Iterator<edge_data> itr2 = outOfn.iterator();
-//				while(itr2.hasNext()) {
-//					edge_data edge = itr2.next();
-//					node_data d = graph_alg.getNode(edge.getDest());
-//					if(d.getTag()==0) {
-//						if(d.getWeight()>(n.getWeight() + edge.getWeight())) {
-//							d.setWeight(n.getWeight() + edge.getWeight());
-//							d.setInfo(""+n.getKey());
-//							notVisited.remove(d);
-//							notVisited.add(d);
-//						} 
-//					}	
-//				}
-//				n.setTag(1);
-//			}
-//			return null;
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return null;
-//	}
+
 	
 	
 	@Override
 	public List<node_data> TSP(List<Integer> targets) 
 	{
+	
 		LinkedList<node_data> listTsp = new LinkedList<node_data>();
 		int key;
 		if (targets.size()==0) 
@@ -353,20 +301,20 @@ public class Graph_Algo implements graph_algorithms,Serializable
 	}
 	
 	
-private void dfs(node_data node) 
-{
-	node.setTag(1); //visited 
-	Collection<edge_data> edge_collect = this.graph_alg.getE(node.getKey()); // the collect edge of current vertex
-	for (edge_data edge : edge_collect) 
-	{
-	int next_vertex = edge.getDest();
-	if (this.graph_alg.getNode(next_vertex).getTag()!=1) 
-	{
-		dfs (this.graph_alg.getNode(next_vertex));
-	}
 
+	
+	private void dfs(node_data node) 
+	{
+		node.setTag(1);
+		Collection<edge_data> t_c = this.graph_alg.getE(node.getKey());
+		if (t_c != null) {
+			for (edge_data edge : t_c) {
+				if (graph_alg.getNode(edge.getDest()) != null && graph_alg.getE(edge.getDest()) != null && graph_alg.getNode(edge.getDest()).getTag() == 0) {
+					dfs(graph_alg.getNode(edge.getDest()));
+				}
+			}
+		}
 	}
-}
 
 public void Dijkstras2 (int src, int dest)
 {

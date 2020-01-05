@@ -21,6 +21,7 @@ public DGraph()
 	this.Edges=	new HashMap<Integer, HashMap<Integer,edge_data>>();
 	this.Vertices= new HashMap<Integer, node_data>();
 	this.size_edges=0;
+	dataStructure.vertex.idBuilder=0;
 }
 
 
@@ -214,4 +215,20 @@ public graph copy()
 }
 
 
+public boolean VertexIsExist(int k) 
+{
+	if (this.Vertices.containsKey(k))
+		return true;
+	return false;
+}
+
+public boolean EdgeIsExist(int s, int d) 
+{
+	if (this.Edges.containsKey(s)) 
+	{
+		if (this.Edges.get(s).containsKey(d))
+			return true; 
+	}
+	return false;
+	}
 }

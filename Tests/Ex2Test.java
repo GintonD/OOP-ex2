@@ -84,6 +84,7 @@ class Ex2Test
 		
 		Graph_GUI MyGui = new Graph_GUI(g);
 		MyGui.setVisible(true);
+		g.connect(n2.getKey(), n1.getKey(), 4.5);
 		return true;
 		
 	}

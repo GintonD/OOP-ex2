@@ -16,22 +16,14 @@ import utils.Point3D;
 
 class Test_algorithms  {
 
-//	@Test
-////	void testShortPath() {
-////		DGraph gre = create();
-////		Graph_Algo algo_Graph =new Graph_Algo();
-////		algo_Graph.init(gre);
-////		double dist = algo_Graph.shortestPathDist(1, 7);
-////		System.out.println(dist);
-////		double expected = 20.0;
-////		assertEquals(20.0, dist);
-////	}
 
 	@Test
-	void testConnect() {
+	void test() {
+		//create
 		DGraph gr = create();
 		Graph_Algo algo_Graph =new Graph_Algo();
 		algo_Graph.init(gr);
+		//connected
 		boolean excepted = algo_Graph.isConnected(); //false
 		assertTrue(!excepted);
 		gr.connect(7, 1, 10);

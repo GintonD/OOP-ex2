@@ -33,10 +33,14 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener/*
 	
 	private static final long serialVersionUID = 1L;
 	private graph TempGraphGui;
+	private graph OriginalGraph;
 	static int mcGui=0; //*run
 	
 	public Graph_GUI(graph g)
 	{
+		this.OriginalGraph=(DGraph)g;
+		this.TempGraphGui=(DGraph)g;
+		
 		initGUI(g);
 //		Thread t = new Thread(this);
 //		mcGui = this.TempGraphGui.getMC(); *run
@@ -60,8 +64,11 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener/*
 		Menu alg  = new Menu("Algorithms ");
 		menuBar.add(alg);
 		
+//		Menu Create = new Menu("Create ");
+//		menuBar.add(Create);
+		
 //**************New button*****************		
-		MenuItem item1 = new MenuItem("Init Graph");
+		MenuItem item1 = new MenuItem("Return To Original Graph");
 		item1.addActionListener(this);
 		New.add(item1);
 		
@@ -97,7 +104,18 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener/*
 	 
 		
 		this.addMouseListener(this);
+		
+		//**************Create button*****************
+
+//		MenuItem item10 = new MenuItem("Add Vertex");
+//		item10.addActionListener(this);
+//		Create.add(item10);
+//		
+//		MenuItem item11 = new MenuItem("connect");
+//		item11.addActionListener(this);
+//		Create.add(item11);
 	}
+	
 	
 	
 	public void paint(Graphics d) 
@@ -163,22 +181,22 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener/*
 		switch(str) 
 		{
 //***************Init Graph***************************************
-		case "Init Graph": 
+		case "Return To Original Graph": 
 			System.out.println("Init Graph:");
-			initGUI(this.TempGraphGui);
+			initGUI(this.OriginalGraph);
 			break;
 			
 //******************Init Random Graph******************************
 		case "Init Random Graph":
 			System.out.println("Init Random Graph..");
 			
-				dataStructure.vertex.idBuilder=0; //maybe delete or change to the constructor
+				//dataStructure.vertex.idBuilder=0; //maybe delete or change to the constructor
 				DGraph rg = new DGraph();
-				vertex[] v = new vertex[4];
+				vertex[] v = new vertex[15];
 				for(int i =0; i<v.length; i++) 
 				{
-					int rx = (int)(Math.random()*350+40);
-					int ry = (int)(Math.random()*350+80);
+					int rx = (int)(Math.random()*600+40);
+					int ry = (int)(Math.random()*600+80);
 					Point3D p =new Point3D(rx,ry);
 					v[i] = new vertex(p);
 					rg.addNode(v[i]);
@@ -188,9 +206,11 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener/*
 					int rs = (int)(Math.random()*v.length);
 					int rf = (int)(Math.random()*v.length);
 					int w = (int)(Math.random()*50);
-					rg.connect(v[rs].getKey(), v[rf].getKey(), w);
+					if((v[rs].getKey() != v[rf].getKey()))
+						rg.connect(v[rs].getKey(), v[rf].getKey(), w);
 				}
 				this.TempGraphGui=rg;
+				this.OriginalGraph=rg;
 				initGUI(this.TempGraphGui);
 		
 			
@@ -287,6 +307,7 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener/*
 				StrPath=StrPath+SPList.get(0).getKey();
 				for (int i=1; i<SPList.size(); ++i) 
 				{
+
 					gr_new.addNode(SPList.get(i));
 					gr_new.connect(SPList.get(i-1).getKey(), SPList.get(i).getKey(), this.TempGraphGui.getEdge(SPList.get(i-1).getKey(), SPList.get(i).getKey()).getWeight());
 					StrPath=StrPath+("->"+SPList.get(i).getKey());
@@ -422,19 +443,26 @@ public class Graph_GUI extends JFrame implements ActionListener, MouseListener/*
 				break;
 			}
 			List<node_data> TSP = newGTSP.TSP(TSPnodes);
-			graph gr_new=new DGraph();
+			graph TSPGraph=new DGraph();
 
-			gr_new.addNode(TSP.get(0));
+			TSPGraph.addNode(TSP.get(0));
 			StrPath=StrPath+TSP.get(0).getKey();
-			for (int i=1; i<TSP.size(); i++) {
-				gr_new.addNode(TSP.get(i));
-				gr_new.connect(TSP.get(i-1).getKey(), TSP.get(i).getKey(), this.TempGraphGui.getEdge(TSP.get(i-1).getKey(), TSP.get(i).getKey()).getWeight());
+			for (int i=1; i<TSP.size(); i++) 
+			{
+
+				if (!((DGraph)TSPGraph).VertexIsExist(TSP.get(i).getKey())) 
+					TSPGraph.addNode(TSP.get(i));	
+				if (!((DGraph)TSPGraph).EdgeIsExist(TSP.get(i-1).getKey(), TSP.get(i).getKey())) 
+					TSPGraph.connect(TSP.get(i-1).getKey(), TSP.get(i).getKey(), this.TempGraphGui.getEdge(TSP.get(i-1).getKey(), TSP.get(i).getKey()).getWeight());
+//				gr_new.addNode(TSP.get(i));
+//				gr_new.connect(TSP.get(i-1).getKey(), TSP.get(i).getKey(), this.TempGraphGui.getEdge(TSP.get(i-1).getKey(), TSP.get(i).getKey()).getWeight());
 				StrPath=StrPath+("->"+TSP.get(i).getKey());
 			}
 
-			this.initGUI(gr_new);
+			this.initGUI(TSPGraph);
 			JOptionPane.showMessageDialog(TSPinput,"The TSP Short Path is:\n"+ StrPath);
 			System.out.println("The TSP Short Path is:\n"+ StrPath);
+			//this.initGUI(this.OriginalGraph);
 			break;
 
 			
