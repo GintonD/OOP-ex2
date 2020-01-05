@@ -17,11 +17,14 @@ src--> n1-->n2-->...dest
 TSP: computes a relatively short path which visit each node in the targets List.
  
  # How To Use:
- For crate graph you have 2 options. 
- 1. init from a file in your computer. the file shoule be from the format Java. 
- 2. Random graph
- 3. Automatic graph
+ For crate graph you have 2 options:
+ 
+ 1. init from a file in your computer: the file shoule be from the format Java. 
+ 2. Automatic Random graph
+ 
  After your choise you have to click on the screen.
+ 
+ After eveyry operation in th gui the graph will Update!!
  
  Save- you can save the file to your folder.
  
