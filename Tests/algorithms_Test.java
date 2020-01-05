@@ -14,7 +14,7 @@ import dataStructure.node_data;
 import dataStructure.vertex;
 import utils.Point3D;
 
-class Test_algorithms  {
+class algorithms_Test  {
 
 
 	@Test
