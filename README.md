@@ -16,3 +16,18 @@ src--> n1-->n2-->...dest
  
 TSP: computes a relatively short path which visit each node in the targets List.
  
+ # How To Use:
+ For crate graph you have 2 options. 
+ 1. init from a file in your computer. the file shoule be from the format Java. 
+ 2. random graph
+ 3. automatic graph
+ after your choise you have to click on the screen.
+ 
+ save- you can save the file to your folder.
+ 
+ algorithm :
+ short distance: choose the sourch and destination. The program tell the distance from source to destination.
+ shortest Path: choose the sourch and destination. The program tell the path from source to destination.
+ TSP: tell how many targets you want. choose the target. the program draw the new graph with the path.
+ Isconnected: screen tell you if in this graph you can go from each vertex to other.
+ 
