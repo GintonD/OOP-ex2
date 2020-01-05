@@ -104,16 +104,7 @@ public class Graph_Algo implements graph_algorithms,Serializable
 		
 	}
 
-	public boolean isConnected(int src, int dest) 
-	{
-		// Step 1: Mark all the vertices as not visited 
-//		if (exsictVertex(src, dest))
-				
-				if (dfs_tovertex(this.graph_alg.getNode(src), dest)==1)
-					return true;
-				return false;
-	}
-	
+
 	
 	@Override
 	public boolean isConnected() 
@@ -159,17 +150,11 @@ public class Graph_Algo implements graph_algorithms,Serializable
 	@Override
 	public double shortestPathDist(int src, int dest) 
 	{
-//		if (isConnected(src, dest)) 
-//		{
+
 		Dijkstras2(src, dest);
 		
 		return this.graph_alg.getNode(dest).getWeight();
-//		}
-//		else 
-//		{
-//			System.out.println("isnot connected");
-//
-//			return Double.MAX_VALUE;
+
 //		}
 	}
 
@@ -177,15 +162,14 @@ public class Graph_Algo implements graph_algorithms,Serializable
 	@Override
 	public List<node_data> shortestPath(int src, int dest) 
 	{
-//		if (shortestPathDist(src, dest)== Double.POSITIVE_INFINITY) {
-//			return null;
+
 //		}
 		LinkedList<node_data> list = new LinkedList<node_data>();
-//		if (isConnected(src, dest)) 
-//		{
-			Dijkstras2(src, dest);		
+
+			Dijkstras2(src, dest);		// go to algorithm
 			String path_List =this.graph_alg.getNode(dest).getInfo();
 			String [] splitArr = path_List.split(" ");
+			// insert to list
 			for (int i = 0; i < splitArr.length; i++) 
 			{
 				int key = Integer.parseInt(splitArr[i]);
@@ -246,7 +230,6 @@ public class Graph_Algo implements graph_algorithms,Serializable
 				key = list_ShortPath.get(j).getKey();
 				if ((targets.contains(key))) 
 				{
-//					targets.remove(key); //FOR WHAT ITZ?
 					
 				}
 				listTsp.add(node);
@@ -329,8 +312,7 @@ public void Dijkstras2 (int src, int dest)
 	weightInfin ();
 	this.graph_alg.getNode(src).setWeight(0.);
 	this.graph_alg.getNode(src).setInfo(""+ graph_alg.getNode(src).getKey());
-//	PriorityQueue<node_data> queueOfList = new PriorityQueue<node_data>(10,new The_Comparator());
-//Queue<node_data> queueOfList2 = new LinkedList<node_data>();
+
 	LinkedList<node_data> queueOfList = new LinkedList<node_data>();
 	The_Comparator comp = new The_Comparator();
 	for (node_data vertex: this.graph_alg.getV()) 
@@ -340,14 +322,13 @@ public void Dijkstras2 (int src, int dest)
 	
 	while (!queueOfList.isEmpty() && this.graph_alg.getNode(dest).getTag()==0) 
 	{
-		queueOfList.sort(comp); // O(n) i try to that with Heap and then is Log n
+		queueOfList.sort(comp); //
 		node_data v1 = queueOfList.get(0);
 		// Visit each edge exiting vertex
 		for (edge_data edge : this.graph_alg.getE(v1.getKey())) 
 		{
 			node_data v2 = this.graph_alg.getNode(edge.getDest());
 			// add to queue for next check
-//			queueOfList.add(v2);
 			if (v2.getTag()==0) 
 			{ //unvisited 
 				
@@ -356,7 +337,6 @@ public void Dijkstras2 (int src, int dest)
 			{
 				v2.setWeight(distV2);
 				v2.setInfo(v1.getInfo()+ " " + v2.getKey());
-//				queueOfList.remove(v2);
 			}
 			}
 		}
@@ -385,49 +365,13 @@ class The_Comparator implements Comparator<node_data>
 	@Override
 	public int compare(node_data arg0, node_data arg1) 
 	{
-		// TODO Auto-generated method stub
-//	if (arg0.getWeight()>arg1.getWeight()) return 1;
-//	else if (arg0.getWeight()<arg1.getWeight()) return -1;
-//	else
-//		return 0;
-		return (int)(arg0.getWeight()-arg1.getWeight());
+
+		if (arg0.getWeight()>arg1.getWeight()) return 1;
+		if (arg0.getWeight()<arg1.getWeight()) return -1;
+
+		return 0;
 	}
 }
 	
 	
-	// algoritem dijkstras - see more wikipedia https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Algorithm
-	/*   1. Mark all nodes unvisited and infinity weight
-	 *   2. Set it to zero for our initial node and to infinity for all other nodes 
-	 * 	 3. For the current node, consider all of its unvisited neighbours and calculate their tentative distances through the current node.
-	 * 	 4.When we are done considering all of the unvisited neighbours of the current node, mark the current node as visited.
-	 * 5. If the destination node has been marked visited 
-	 *  (when planning a route between two specific nodes) or if the smallest tentative distance. then stop.
-	 *  6. Otherwise, select the unvisited node that is marked with the smallest tentative 
-	 *  distance, set it as the new "current node", and go back to step 3.
-	 *
-	 */
-	/*
-	public void Dijkstras (int src, int dest) {
-		unvisited();
-		weightInfin ();
-		node_data curr = graph_alg.getNode(src);
-		curr.setWeight(0);
-		Iterator it =  this.graph_alg.getE(curr.getKey()).iterator(); // iterator , not use. 
-		while (curr.getTag()!=1 && graph_alg.getNode(dest).getTag() != 1) { // not visited in this vertex, and the dest not visitied 
-			Collection<edge_data> edge_collect = this.graph_alg.getE(curr.getKey());
-			double min= Double.MAX_VALUE;
-			for (edge_data edge : edge_collect) {
-				int dest_curr = edge.getDest();
-				node_data next_vertex = graph_alg.getNode(dest_curr);
-				curr.setTag(0);
-				if (edge.getWeight() < min && next_vertex.getTag() != 1 ) { // go to min edge vertex, check that itsn't visited
-					next_vertex.setWeight(edge.getWeight()+curr.getWeight());
-					min= edge.getWeight();
-					next_vertex.setInfo(curr.getKey() + " ");
-					curr = next_vertex;
-				} // end if
-			}
-		}
-	}
-	*/
 } 
